@@ -3,6 +3,8 @@ package uk.ac.london.assignment.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import uk.ac.london.ecc.Curve;
+
 @Document(collection = "Student")
 public class Student {
 
@@ -10,6 +12,7 @@ public class Student {
 
 	private String firstName;
 	private String lastName;
+	private Curve curve;
 
 	public Student() {
 	}
@@ -77,6 +80,14 @@ public class Student {
 		} else if (!lastName.equals(other.lastName))
 			return false;
 		return true;
+	}
+
+	public Curve getCurve() {
+		return curve;
+	}
+
+	public void setCurve(Curve curve) {
+		this.curve = curve;
 	}
 
 }

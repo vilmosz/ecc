@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import uk.ac.london.assignment.model.Student;
 import uk.ac.london.assignment.repository.StudentRepository;
+import uk.ac.london.ecc.Curve;
 
 @Component
 public class DummyDataLoader implements CommandLineRunner {
@@ -19,7 +20,9 @@ public class DummyDataLoader implements CommandLineRunner {
 
 	@Override
 	public void run(String... strings) throws Exception {
-		Student s1 = new Student("Frodo", "Baggins");
-		this.repository.save(s1);
+		repository.deleteAll();
+		Student s1 = new Student("Vilmos", "Zsombori");
+		s1.setCurve(new Curve(2L, 3L));
+		repository.save(s1);
 	}
 }

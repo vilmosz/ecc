@@ -40,3 +40,4 @@ hs_err_pid*
 
 # Node modules
 /node_modules/
+/.springBeans
