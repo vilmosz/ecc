@@ -41,3 +41,6 @@ hs_err_pid*
 # Node modules
 /node_modules/
 /.springBeans
+
+# Webpack
+/src/main/resources/static/built
