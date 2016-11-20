@@ -40,7 +40,7 @@ class StudentList extends React.Component{
 					<tr>
 						<th>First Name</th>
 						<th>Last Name</th>
-						<th>Description</th>
+						<th>ECC</th>
 					</tr>
 					{students}
 				</tbody>
@@ -57,7 +57,7 @@ class Student extends React.Component{
 			<tr>
 				<td>{this.props.student.firstName}</td>
 				<td>{this.props.student.lastName}</td>
-				<td>{this.props.student.description}</td>
+				<td><a href={`modk-add.html?a=${this.props.student.curve.a}&b=${this.props.student.curve.b}`} >modk-add</a></td>
 			</tr>
 		)
 	}
