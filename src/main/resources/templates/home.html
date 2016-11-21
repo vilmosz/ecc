@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head lang="en">
+		<meta charset="UTF-8" />
+		<title>CO3326 Coursework 2016/17</title>
+		<link rel="stylesheet" href="/main.css" />
+	</head>
+<body>
+
+<main>
+	<table>
+		<thead>
+			<tr>
+				<td>Id</td>
+				<td>First name</td>
+				<td>Last name</td>
+				<td>ECC</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="student : ${students}">
+				<td th:text="${student.id}" />
+				<td th:text="${student.firstName}" />
+				<td th:text="${student.lastName}" />
+				<td>
+				<table>
+				<tr>
+					<td><a th:href="@{reals-add.html(id=${student.id})}">reals-add</a></td>
+					<td><a th:href="@{reals-mul.html(id=${student.id})}">reals-mul</a></td>
+					<td><a th:href="@{modk-add.html(id=${student.id})}">modk-add</a></td>
+					<td><a th:href="@{modk-mul.html(id=${student.id})}">modk-mul</a></td>
+				</tr>
+				</table>
+				</td>				
+			</tr>
+		</tbody>
+	</table>
+</main>
+
+</body>
+</html>
