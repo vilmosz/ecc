@@ -1,35 +1,25 @@
 package uk.ac.london.ecc;
 
-public class Curve {
+public class Ecc {
 
 	private Long a;
 	private Long b;
+	private Long p;
 
-	public Curve(Long a, Long b) {
+	public Ecc() {
+		super();
+	}
+
+	public Ecc(Long a, Long b, Long p) {
 		super();
 		this.a = a;
 		this.b = b;
-	}
-
-	public Long getA() {
-		return a;
-	}
-
-	public Long getB() {
-		return b;
-	}
-
-	public void setA(Long a) {
-		this.a = a;
-	}
-
-	public void setB(Long b) {
-		this.b = b;
+		this.p = p;
 	}
 
 	@Override
 	public String toString() {
-		return "Curve [a=" + a + ", b=" + b + "]";
+		return "Ecc [a=" + a + ", b=" + b + ", p=" + p + "]";
 	}
 
 	@Override
@@ -38,6 +28,7 @@ public class Curve {
 		int result = 1;
 		result = prime * result + ((a == null) ? 0 : a.hashCode());
 		result = prime * result + ((b == null) ? 0 : b.hashCode());
+		result = prime * result + ((p == null) ? 0 : p.hashCode());
 		return result;
 	}
 
@@ -49,7 +40,7 @@ public class Curve {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Curve other = (Curve) obj;
+		Ecc other = (Ecc) obj;
 		if (a == null) {
 			if (other.a != null)
 				return false;
@@ -60,7 +51,36 @@ public class Curve {
 				return false;
 		} else if (!b.equals(other.b))
 			return false;
+		if (p == null) {
+			if (other.p != null)
+				return false;
+		} else if (!p.equals(other.p))
+			return false;
 		return true;
 	}
 
+	public Long getA() {
+		return a;
+	}
+
+	public void setA(Long a) {
+		this.a = a;
+	}
+
+	public Long getB() {
+		return b;
+	}
+
+	public void setB(Long b) {
+		this.b = b;
+	}
+
+	public Long getP() {
+		return p;
+	}
+
+	public void setP(Long p) {
+		this.p = p;
+	}
+		
 }

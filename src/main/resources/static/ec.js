@@ -1,4 +1,4 @@
-
+var oo;
 (function($) {
 
     $.ec = {
@@ -101,13 +101,17 @@
 
         return true;
     };
-
+    
     ///////////////////////////////////////////////////////////////////////////
     // $.ec.Base
 
     $.ec.Base = function() {
         setInputValuesFromHash();
-
+        
+        this.isPrime = function(p) {
+        	return isPrime(p);
+        };
+        
         this.aInput = $("input[name='a']");
         this.bInput = $("input[name='b']");
         this.plotContainer = $("#plot");

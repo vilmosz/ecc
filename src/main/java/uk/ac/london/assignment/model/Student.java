@@ -1,9 +1,11 @@
 package uk.ac.london.assignment.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import uk.ac.london.ecc.Curve;
+import uk.ac.london.ecc.Ecc;
 
 @Document(collection = "Student")
 public class Student {
@@ -12,7 +14,8 @@ public class Student {
 
 	private String firstName;
 	private String lastName;
-	private Curve curve;
+	private Ecc ecc;
+	private List<Exercise> assignment;
 
 	public Student() {
 	}
@@ -82,12 +85,20 @@ public class Student {
 		return true;
 	}
 
-	public Curve getCurve() {
-		return curve;
+	public Ecc getEcc() {
+		return ecc;
 	}
 
-	public void setCurve(Curve curve) {
-		this.curve = curve;
+	public void setEcc(Ecc ecc) {
+		this.ecc = ecc;
+	}
+
+	public List<Exercise> getAssignment() {
+		return assignment;
+	}
+
+	public void setAssignment(List<Exercise> assignment) {
+		this.assignment = assignment;
 	}
 
 }
