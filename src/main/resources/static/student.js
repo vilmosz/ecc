@@ -27,7 +27,7 @@ $(document).ready(function() {
 			continue;
 		}
 
-		var url = "/api/students/" + value;
+		var url = "api/students/" + value;
 		var id = value;
 
 		$.ajax({

@@ -1,11 +1,13 @@
 spring:
   data:
     rest:
-      base-path: "/api"
+      base-path: "api"
     mongodb:
       uri: "@mongodb.uri@"
 
 server:
   port: 8080
   
-   
+logging:
+  level:
+    org.springframework: "off"   
