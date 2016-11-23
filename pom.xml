@@ -44,7 +44,7 @@
 	    <profile>
 	        <id>prod</id>
 	        <properties>    
-	        	<mongodb.uri>mongodb://${user}:${password}@172.16.100.86:27017/ecc</mongodb.uri>	        	
+	        	<mongodb.uri>mongodb://${user}:${password}@172.16.100.86:27017/test?authSource=db</mongodb.uri>	        	
 	        </properties>
 	    </profile>
 	</profiles>
