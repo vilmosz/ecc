@@ -43,12 +43,15 @@ $(document).ready(function() {
 				});
 
 				// Update query string
-				if (typeof student !== 'undefined' && typeof student.curve != 'undefined') {
-					if (!hash.includes("a=" + student.curve.a)) {
-						hash += "&a=" + student.curve.a;
+				if (typeof student !== 'undefined' && typeof student.ecc != 'undefined') {
+					if (!hash.includes("a=" + student.ecc.a)) {
+						hash += "&a=" + student.ecc.a;
 					}
-					if (!hash.includes("b=" + student.curve.b)) {
-						hash += "&b=" + student.curve.b;
+					if (!hash.includes("b=" + student.ecc.b)) {
+						hash += "&b=" + student.ecc.b;
+					}
+					if (!hash.includes("p=" + student.ecc.k)) {
+						hash += "&p=" + student.ecc.k;
 					}
 					if (hash[0] === "&") {
 						hash = hash.substr(1);
@@ -75,16 +78,19 @@ $(document).ready(function() {
 	generate = function() {
 		$(function() {
 			var primes = [ 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179 ];
-			for (a = -9; a < -4; a++) {
+			for (a = -9; a < -2; a++) {
 				$('#coefficient-a').val(a);
-				for (b = Math.abs(a); b < 16; b++) {
+				for (b = Math.abs(a); b < 17; b++) {
+					if (4 * a * a * a + 27 * b * b == 0) {
+						continue;
+					}
 					$('#coefficient-b').val(b);
 					for (p in primes) {
 						$('#coefficient-p').val(primes[p]);
 						$.ec.curve = new $.ec.modk.ScalarMultiplication();
 						$.ec.curve.update();
 						var order = $.ec.curve.getSubgroupOrder();
-						if ($.ec.curve.isPrime(order) && order > 60) {
+						if ($.ec.curve.isPrime(order) && order > 80) {
 							console.log("a =", a, "b =", b, "p =", primes[p], "order =", order);
 						}
 					}
@@ -104,22 +110,27 @@ $(document).ready(function() {
 		var modkMul = function() {
 			var results = [];
 			var primes = [ 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179 ];
-			for (var a = -9; a < -4; a++) {
+			for (var a = -9; a < -1; a++) {
 				$('#coefficient-a').val(a);
-				for (var b = Math.abs(a); b < 16; b++) {
+				for (var b = Math.abs(a); b < 17; b++) {
+					if (4 * a * a * a + 27 * b * b == 0) {
+						log.warn("singularity skipped:", "a =", a, "b =", b);
+						continue;
+					}
 					$('#coefficient-b').val(b);
 					for (var p in primes) {
 						$('#coefficient-p').val(primes[p]);
 						$.ec.curve = new $.ec.modk.ScalarMultiplication();
 						$.ec.curve.update();
 						var order = $.ec.curve.getSubgroupOrder();
-						if ($.ec.curve.isPrime(order) && order > 60) {
+						if ($.ec.curve.isPrime(order) && order > 80) {
 							results.push({
 									a: a,
 									b: b,
-									p: primes[p]
+									prime: primes[p],
+									order: order
 							});
-							console.log("a =", a, "b =", b, "p =", primes[p], "order =", order);
+							console.log("a =", a, "b =", b, "prime =", primes[p], "order =", order);
 						}
 					}
 				}
@@ -128,9 +139,32 @@ $(document).ready(function() {
 		};
 		
 		var modkAdd = function() {
-			console.warn("Yet to be implemented:", html);
-			// TODO implement
-			return [];
+			var results = [];
+			var primes = [ 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179 ];
+			for (var a = -9; a < -1; a++) {
+				$('#coefficient-a').val(a);
+				for (var b = Math.abs(a); b < 17; b++) {
+					if (4 * a * a * a + 27 * b * b == 0) {
+						log.warn("singularity skipped:", "a =", a, "b =", b);
+						continue;
+					}
+					$('#coefficient-b').val(b);
+					for (var p in primes) {
+						$('#coefficient-p').val(primes[p]);
+						$.ec.curve = new $.ec.modk.PointAddition();
+						$.ec.curve.update();
+							results.push({
+									a: a,
+									b: b,
+									prime: primes[p],
+									p: $.ec.curve.p,
+									q: $.ec.curve.q
+							});
+							console.log("a =", a, "b =", b, "prime =", primes[p], "p=", $.ec.curve.p, "q=", $.ec.curve.q);
+					}
+				}
+			}
+			return results;
 		};
 
 		var realsAdd = function() {

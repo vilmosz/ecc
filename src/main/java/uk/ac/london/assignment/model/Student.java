@@ -1,6 +1,7 @@
 package uk.ac.london.assignment.model;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,77 +13,24 @@ public class Student {
 
 	private @Id String id;
 
-	private String firstName;
-	private String lastName;
+	private String name;
 	private Ecc ecc;
-	private List<Exercise> assignment;
+	private Map<String, Exercise> assignment;
 
-	public Student() {
+	public Student() {}
+
+	public void addAssignment(Exercise exercise) {
+		if (assignment == null)
+			assignment = new HashMap<>();
+		assignment.put(exercise.getExercise(), exercise);		
 	}
-
-	public Student(String firstName, String lastName) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("Student[id=%s, firstName='%s', lastName='%s']", id, firstName, lastName);
-	}
-
+	
 	public String getId() {
 		return id;
 	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Student other = (Student) obj;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		return true;
+	
+	public String getSrn() {
+		return getId();
 	}
 
 	public Ecc getEcc() {
@@ -93,12 +41,29 @@ public class Student {
 		this.ecc = ecc;
 	}
 
-	public List<Exercise> getAssignment() {
+	public Map<String, Exercise> getAssignment() {
 		return assignment;
 	}
 
-	public void setAssignment(List<Exercise> assignment) {
+	public void setAssignment(Map<String, Exercise> assignment) {
 		this.assignment = assignment;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", name=" + name + ", ecc=" + ecc + "]";
 	}
 
 }

@@ -4,22 +4,22 @@ public class Ecc {
 
 	private Long a;
 	private Long b;
-	private Long p;
+	private Long k;
 
 	public Ecc() {
 		super();
 	}
 
-	public Ecc(Long a, Long b, Long p) {
+	public Ecc(Long a, Long b, Long k) {
 		super();
 		this.a = a;
 		this.b = b;
-		this.p = p;
+		this.k = k;
 	}
 
 	@Override
 	public String toString() {
-		return "Ecc [a=" + a + ", b=" + b + ", p=" + p + "]";
+		return "Ecc [a=" + a + ", b=" + b + ", k=" + k + "]";
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class Ecc {
 		int result = 1;
 		result = prime * result + ((a == null) ? 0 : a.hashCode());
 		result = prime * result + ((b == null) ? 0 : b.hashCode());
-		result = prime * result + ((p == null) ? 0 : p.hashCode());
+		result = prime * result + ((k == null) ? 0 : k.hashCode());
 		return result;
 	}
 
@@ -51,10 +51,10 @@ public class Ecc {
 				return false;
 		} else if (!b.equals(other.b))
 			return false;
-		if (p == null) {
-			if (other.p != null)
+		if (k == null) {
+			if (other.k != null)
 				return false;
-		} else if (!p.equals(other.p))
+		} else if (!k.equals(other.k))
 			return false;
 		return true;
 	}
@@ -75,12 +75,12 @@ public class Ecc {
 		this.b = b;
 	}
 
-	public Long getP() {
-		return p;
+	public Long getK() {
+		return k;
 	}
 
-	public void setP(Long p) {
-		this.p = p;
+	public void setK(Long k) {
+		this.k = k;
 	}
 		
 }

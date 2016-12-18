@@ -5,43 +5,44 @@ import java.awt.Point;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-@JsonTypeName("modk-add")
-public class ModkAdd extends Exercise {
+@JsonTypeName("modk-mul")
+public class ModkMul extends Exercise {
 
-	private Point p, q, r;
+	private Point p, q;
+	private Integer n;
 	
-	public ModkAdd() {
+	public ModkMul() {
 		super();
 	}
 
 	public Point getP() {
 		return p;
 	}
+	
+	@JsonIgnore
+	public Point getQ() {
+		return q;
+	}
+ 
+	public Integer getN() {
+		return n;
+	}
 
 	public void setP(Point p) {
 		this.p = p;
-	}
-
-	public Point getQ() {
-		return q;
 	}
 
 	public void setQ(Point q) {
 		this.q = q;
 	}
 
-	@JsonIgnore
-	public Point getR() {
-		return r;
-	}
-
-	public void setR(Point r) {
-		this.r = r;
+	public void setN(Integer n) {
+		this.n = n;
 	}
 
 	@Override
 	public String getExercise() {
-		return "modk-add";
+		return "modk-mul";
 	}
-
+	
 }

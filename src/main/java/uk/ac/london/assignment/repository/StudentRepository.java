@@ -12,9 +12,7 @@ import uk.ac.london.assignment.model.Student;
 @RepositoryRestResource
 public interface StudentRepository extends MongoRepository<Student, String> {
 
-	public List<Student> findByFirstName(@Param("s") String s);
-
-	public List<Student> findByLastName(@Param("s") String lastName);
+	public List<Student> findByName(@Param("s") String s);
 	
 	@Query(value="{'ecc.a': ?0, '$and' : [{'ecc.b' : ?1}]}")
 	public List<Student> findByCurve(@Param("a") Long a, @Param("b") Long b);
