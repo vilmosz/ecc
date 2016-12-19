@@ -1,4 +1,7 @@
-# University of London International Programmes<br/>CO3326 Computer Security 2016-17<br/>Coursework assignment 1
+# University of London International Programmes<br/>CO3326 Computer Security 2016-17
+
+## Coursework assignment 1
+
 __IMPORTANT:__ all students will receive an email containing a unique set of numbers to use for this coursework. If you do not receive this email, please check your spam folder, before emailing us at: (intcomp@gold.ac.uk) 
 
 The aim of this coursework is to show evidence of an understanding of what Elliptic Curve Cryptography (ECC) is, how it works and why it is considered secure.
