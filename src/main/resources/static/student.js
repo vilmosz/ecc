@@ -53,6 +53,13 @@ $(document).ready(function() {
 					if (!hash.includes("p=" + student.ecc.k)) {
 						hash += "&p=" + student.ecc.k;
 					}
+					if (typeof student.assignment != 'undefined' 
+						&& typeof student.assignment['modk-mul'] != 'undefined' 
+						&& typeof student.assignment['modk-mul'].n != 'undefined') {
+						if (!hash.includes("n=" + student.assignment['modk-mul'].n)) {
+							hash += "&n=" + student.assignment['modk-mul'].n;
+						}
+					} 
 					if (hash[0] === "&") {
 						hash = hash.substr(1);
 					}
