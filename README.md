@@ -26,8 +26,8 @@ Please write your report using the following skeleton:
 1.	Explain in simple terms, using your own words, how elliptic curves are restricted to a finite field 𝔽<sub>k</sub>.
 2.	Explain what _order_ of the field means and calculate the order of your field, using _k_ that you were given (𝔽<sub>k</sub>).
 3.	Using your curve and your field, that you have calculated, demonstrate:
-  *	point addition, by calculating R = P + Q with the values you were given (points P and Q)
-  *	scalar multiplication, by calculating S = n * P over the field 𝔽<sub>k</sub>, using point P and n = 3.
+  *	point addition, by calculating _R = P + Q_ with the values you were given (points _P_ and _Q_)
+  *	scalar multiplication, by calculating _S = n * P_ over the field 𝔽<sub>k</sub>, using the same point _P_ as above and _n_, both of which you were given.
 4.	Finally, in the ECC context explain, using your own words, what the easy problem is, and what seems to be hard problem; explain how this relates to the discrete logarithm problem.
 5. Explain how ECC can be used for cryptography, and more specifically for key exchange.
 
@@ -100,6 +100,6 @@ He then uses _k = 103_ to restrict the curve onto the 𝔽<sub>k</sub> = 𝔽<su
 NOTE: This will most probably involve some programming. You may choose a programming language of your liking, whatever you're the most comfortable with. Most programming languages have very good support for JSON parsing and output (including Java, C#, Python and JavaScript), so you can even rely on your programme to produce the required JSON output. 
 `
 
-Then, using his 2 points, _P(19, 97)_ and _Q(27, 81)_, he does the modulo addition (`modk-add`) over the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> field: _R = P + Q_, which gives = _R(61, 90)_. Note the result under the `modk-add` hash in the JSON result. He also does the modulo multiplication (`modk-mul`): _S = nP_, which gives = _S(63, 46)_. Note the result under the `modk-mul` hash in the JSON result.
+Then, using his 2 points, _P(19, 97)_ and _Q(27, 81)_, he does the modulo addition (`modk-add`) over the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> field: _R = P + Q_, which gives = _R(61, 90)_. Note the result under the `modk-add` hash in the JSON result. He also does the modulo multiplication (`modk-mul`): _S = nP_, using _n = 3_ and _P(19, 97)_, which gives = _S(63, 46)_. Note the result under the `modk-mul` hash in the JSON result.
 
 <p align="center"><b>[END OF COURSEWORK ASSIGNMENT 1]</b></p>
