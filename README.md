@@ -91,7 +91,7 @@ He would submit the following JSON, which reflects a correct solution:
 Using his _a_ and _b_ values, the generic elliptic curve, defined by _y<sup>2</sup> = x<sup>3</sup> + ax + b_, becomes _y<sup>2</sup> = x<sup>3</sup> - 2x + 13_. This curve is used throught the coursework. 
 
 `
-NOTE: You may rely on any graph plotting package (or online tool) to plot curves (for example, try typing in _x^3 - 2x + 13_ into Google). You will have to demonstrate the mathematical operations (geometric addition and scalar multiplication) using points of your choice on your curve. The calculations, with some detail, will have to be included in your report. Please remember, that calculation results are easiest to show on plots.
+NOTE: You may rely on any graph plotting package (or online tool) to plot curves (for example, try typing "x^3 - 2x + 13" into Google). You will have to demonstrate the mathematical operations (geometric addition and scalar multiplication) using points of your choice on your curve. The calculations, with some detail, will have to be included in your report. Please remember, that calculation results are easiest to show on plots.
 `
 
 He then uses _k = 103_ to restrict the curve onto the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> prime field. He determines the _order_ of the field, by working out how many points does the discrete curve have (including the point at infinity). In this case it is 109 (observe `"order": 109` in the JSON result). 
