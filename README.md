@@ -27,7 +27,7 @@ Please write your report using the following skeleton:
 2.	Explain what _order_ of the field means and calculate the order of your field, using _k_ that you were given (𝔽<sub>k</sub>).
 3.	Using your curve and your field, that you have calculated, demonstrate:
   *	point addition, by calculating R = P + Q with the values you were given (points P and Q)
-  *	scalar multiplication, by calculating S = n * P over the field 𝔽k, using point P and n = 3.
+  *	scalar multiplication, by calculating S = n * P over the field 𝔽<sub>k</sub>, using point P and n = 3.
 4.	Finally, in the ECC context explain, using your own words, what the easy problem is, and what seems to be hard problem; explain how this relates to the discrete logarithm problem.
 5. Explain how ECC can be used for cryptography, and more specifically for key exchange.
 
