@@ -8,27 +8,40 @@ The web is full of information on the subject, so you will not find it difficult
 
 Please write a report using the following skeleton:
 
-1. Elliptic curves over real numbers
-  a. Define briefly what elliptic curves are and plot the elliptic curve based on the _a_ and _b_ parameters you were given.
-  b. Explain in simple terms the group law for elliptic curves and demonstrate
-    * geometric addition and
-    * scalar multiplication
-    with arbitrary points on your curve.
-2. Elliptic curves over finite fields
-  a. Explain in simple terms how are elliptic curves restricted to a finite field 𝔽k.
-  b. Explain what _order_ of the field means and calculate the order of your field, using _k_ that you were given (𝔽k).
-  c. Demonstrate
-    * point addition, by calculating R = P + Q and
-    * scalar multiplication, by calculating S = n * P
-    over the field 𝔽k, with the values you were given: the points (P and Q) and _k_.    
-    _Note:_ P and Q are the points that you were given. Please use _n = 3_ for the multplication.
-3. Finally, in the ECC context explain what is the "easy" problem, and what seems to be "hard" problem; explain how how does it relate to the discrete logarithm problem; explain how can ECC be used for cryptography.
+### Elliptic curves over real numbers
+1. Define briefly what elliptic curves are and plot the elliptic curve based on the _a_ and _b_ parameters you were given.
+2. Explain in simple terms the group law for elliptic curves and demonstrate
+  * geometric addition and
+  * scalar multiplication
+  with arbitrary points on your curve.
 
-Show all your work. Anything that you used from your research should be included in the references section at the end of your coursework. Please note, that there is no need to copy-paste entire explanation. A simple sketch that demonstrates your understanding, mainly based around the calculations with your own numbers (the numbers you were given) will sufice.
+### Elliptic curves over finite fields
+1. Explain in simple terms how are elliptic curves restricted to a finite field 𝔽k.
+2. Explain what _order_ of the field means and calculate the order of your field, using _k_ that you were given (𝔽k).
+3. Demonstrate
+  * point addition, by calculating R = P + Q and
+  * scalar multiplication, by calculating S = n * P
+  over the field 𝔽k, with the values you were given: the points (P and Q) and _k_.    
 
-In addition to your report, you will have to summarize the results of your calculations in a strictly specified JSON format.
+  _Note:_ P and Q are the points that you were given. Please use _n = 3_ for the multplication.
+
+4. Finally, in the ECC context explain what is the _easy problem_, and what seems to be _hard problem_; explain how does it relate to the discrete logarithm problem.
+5. Explain how can ECC be used for cryptography, and more specifically for key exchange.
+
+Show all your work. Anything that you used from your research should be included in the references section at the end of your coursework. Please note, that there is no need to copy-paste entire explanations or mathematical proofs. A simple sketch that demonstrates your understanding is enough and it should be based around the calculations with your own numbers (the numbers you were given).
 
 ## Submission requirements
+The report should be submitted as a PDF document, following a strict naming scheme: *StudentName_{srn}_CO3326_cw1.pdf*. For example, if your name is _Mark Zuckerberg_ and your SRN is _000000001_, your report submission will be *MarkZuckerberg_000000001_CO3326_cw1.pdf*. Your report will count as __60%__ of your CW1 mark.
+
+In addition to your report, you will also submit a JSON file, which follows a _strict format_ and summarizes the results of your calculations. This will count as __40%__ of your CW1 and will be automatically checked, so particular attention to its format. The name of the file should be *StudentName_{srn}_CO3326_cw1.json*; for example, if your name is _Mark Zuckerberg_ and your SRN is _000000001_, your JSON submission will be *MarkZuckerberg_000000001_CO3326_cw1.json*.
+
+You can use the following well-formed JSON and adapt it to your numbers and your calculation results. These numbers reflect a correct solution for a hypothetical student, _Mark Zuckerberg_, with SRN _000000001_, who received the following numbers:
+
+| SRN       | Name            |  a  |  b  |  k  |  Px |  Py |  Qx |  Qy |  n  |
+| --------- |:----------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 000000001	| MARK ZUCKERBERG |  -2 |  13 | 103 |  19 |  97 |  27 |  81 |  3  |
+
+would submit the following JSON:
 
 ```json
 {
@@ -41,20 +54,7 @@ In addition to your report, you will have to summarize the results of your calcu
     "order": 109
   },
   "assignment": {
-    "modk-mul": {
-      "exercise": "modk-mul",
-      "n": 3,
-      "p": {
-        "x": 19,
-        "y": 97
-      },
-      "q": {
-        "x": 63,
-        "y": 46
-      }
-    },
     "modk-add": {
-      "exercise": "modk-add",
       "p": {
         "x": 19,
         "y": 97
@@ -67,7 +67,19 @@ In addition to your report, you will have to summarize the results of your calcu
         "x": 61,
         "y": 90
       }
+    },
+    "modk-mul": {
+      "n": 3,
+      "p": {
+        "x": 19,
+        "y": 97
+      },
+      "s": {
+        "x": 63,
+        "y": 46
+      }
     }
   }
 }
 ```
+
