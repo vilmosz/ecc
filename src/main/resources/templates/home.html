@@ -11,43 +11,38 @@
 	<table>
 		<thead>
 			<tr>
-				<td>Student code</td>
-				<td>Name</td>
-				<td>
-					<table>
-						<tr>
-							<th>a</th>
-							<th>b</th>
-							<th>k</th>
-						</tr>
-					</table>
-				</td>
-				<td>Solution</td>
+				<th rowspan="2">Student code</th>
+				<th rowspan="2">Name</th>
+				<th colspan="3" rowspan="1">Curve/field parameters</th>
+				<th colspan="2" rowspan="1">P</th>
+				<th colspan="2" rowspan="1">Q</th>
+				<th colspan="2" rowspan="1">Solution</th>
+			</tr>
+			<tr>
+				<th>a</th>
+				<th>b</th>
+				<th>k</th>			
+				<th>X</th>
+				<th>Y</th>
+				<th>X</th>
+				<th>Y</th>
+				<th>modk-add</th>
+				<th>modk-mul</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="student : ${students}">
 				<td th:text="${student.id}" />
 				<td th:text="${student.name}" />
-				<td>
-					<table>
-						<tr>
-							<td th:text="${student.ecc.a}" />
-							<td th:text="${student.ecc.b}" />
-							<td th:text="${student.ecc.k}" />
-						</tr>
-					</table>
-				</td>
-				<td>
-					<table>
-						<tr>
-							<td><a th:href="@{reals-add.html(id=${student.id})}">reals-add</a></td>
-							<td><a th:href="@{reals-mul.html(id=${student.id})}">reals-mul</a></td>
-							<td><a th:href="@{modk-add.html(id=${student.id})}">modk-add</a></td>
-							<td><a th:href="@{modk-mul.html(id=${student.id})}">modk-mul</a></td>
-						</tr>
-					</table>
-				</td>				
+				<td th:text="${student.ecc.a}" />
+				<td th:text="${student.ecc.b}" />
+				<td th:text="${student.ecc.k}" />
+				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].p.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].p.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td><a th:href="@{modk-add.html(id=${student.id})}">modk-add</a></td>
+				<td><a th:href="@{modk-mul.html(id=${student.id})}">modk-mul</a></td>
 			</tr>
 		</tbody>
 	</table>
