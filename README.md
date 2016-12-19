@@ -1,6 +1,4 @@
-# University of London International Programmes
-## CO3326 Computer Security 2016-17
-## Coursework assignment 1
+# University of London International Programmes<br/>CO3326 Computer Security 2016-17<br/>Coursework assignment 1
 __IMPORTANT:__ all students will receive an email containing a unique set of numbers to use for this coursework. If you do not receive this email, please check your spam folder, before emailing us at: (intcomp@gold.ac.uk) 
 
 The aim of this coursework is to show evidence of an understanding of what Elliptic Curve Cryptography (ECC) is, how it works and why it is considered secure.
@@ -101,4 +99,4 @@ NOTE: This will most probably involve some programming. You may choose a program
 
 Then, using his 2 points, _P(19, 97)_ and _Q(27, 81)_, he does the modulo addition (`modk-add`) over the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> field: _R = P + Q_, which gives = _R(61, 90)_. Note the result under the `modk-add` hash in the JSON result. He also does the modulo multiplication (`modk-mul`): _S = nP_, which gives = _S(63, 46)_. Note the result under the `modk-mul` hash in the JSON result.
 
-<center>__[END OF COURSEWORK ASSIGNMENT 1]__</center>
+<p align="center"><b>[END OF COURSEWORK ASSIGNMENT 1]</b></p>
