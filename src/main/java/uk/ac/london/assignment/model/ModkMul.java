@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("modk-mul")
 public class ModkMul extends Exercise {
 
-	private Point p, q;
+	private Point p, s;
 	private Integer n;
 	
 	public ModkMul() {
@@ -20,8 +20,8 @@ public class ModkMul extends Exercise {
 	}
 	
 	@JsonIgnore
-	public Point getQ() {
-		return q;
+	public Point getS() {
+		return s;
 	}
  
 	public Integer getN() {
@@ -32,8 +32,8 @@ public class ModkMul extends Exercise {
 		this.p = p;
 	}
 
-	public void setQ(Point q) {
-		this.q = q;
+	public void setS(Point s) {
+		this.s = s;
 	}
 
 	public void setN(Integer n) {

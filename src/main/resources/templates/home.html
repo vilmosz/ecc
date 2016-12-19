@@ -3,7 +3,8 @@
 	<head lang="en">
 		<meta charset="UTF-8" />
 		<title>CO3326 Coursework 2016/17</title>
-		<link rel="stylesheet" href="main.css" />
+		<link rel="stylesheet" type="text/css" href="https://konklone.io/json/assets/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="main.css" />		
 	</head>
 <body>
 
@@ -16,7 +17,8 @@
 				<th colspan="3" rowspan="1">Curve/field parameters</th>
 				<th colspan="2" rowspan="1">P</th>
 				<th colspan="2" rowspan="1">Q</th>
-				<th colspan="2" rowspan="1">Solution</th>
+				<th rowspan="2">n</th>
+				<th colspan="4" rowspan="1">Solution</th>
 			</tr>
 			<tr>
 				<th>a</th>
@@ -28,6 +30,8 @@
 				<th>Y</th>
 				<th>modk-add</th>
 				<th>modk-mul</th>
+				<th>real-add</th>
+				<th>real-mul</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,8 +45,11 @@
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].p.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${#numbers.formatDecimal(student.assignment['modk-mul'].n, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td><a th:href="@{modk-add.html(id=${student.id})}">modk-add</a></td>
 				<td><a th:href="@{modk-mul.html(id=${student.id})}">modk-mul</a></td>
+				<td><a th:href="@{reals-add.html(id=${student.id})}">real-add</a></td>
+				<td><a th:href="@{reals-mul.html(id=${student.id})}">real-mul</a></td>
 			</tr>
 		</tbody>
 	</table>

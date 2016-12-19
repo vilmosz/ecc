@@ -1,5 +1,6 @@
 package uk.ac.london.assignment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class Exercise {
 
+	@JsonIgnore
 	public abstract String getExercise();
 	
 }
