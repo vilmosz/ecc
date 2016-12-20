@@ -91,15 +91,15 @@ He would submit the following JSON, which reflects a correct solution:
 Using his _a_ and _b_ values, the generic elliptic curve, defined by _y<sup>2</sup> = x<sup>3</sup> + ax + b_, becomes _y<sup>2</sup> = x<sup>3</sup> - 2x + 13_. This curve is used throught the coursework. 
 
 `
-NOTE: You may rely on any graph plotting package (or online tool) to plot curves (for example, try typing "x^3 - 2x + 13" into Google). You will have to demonstrate the mathematical operations (geometric addition and scalar multiplication) using points of your choice on your curve. The calculations, with some detail, will have to be included in your report. Please remember, that calculation results are easiest to show on plots.
+NOTE: You may rely on any graph plotting package (or online tool) to plot curves (for example, try typing "x^3 - 2x + 13" into Google). You will have to demonstrate the mathematical operations (geometric addition and scalar multiplication) using points of your choice on your curve. The calculations, showing step by step detail, should be included in your report. Please remember, that calculation results are best shown using plots.
 `
 
-He then uses _k = 103_ to restrict the curve onto the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> prime field. He determines the _order_ of the field, by working out how many points does the discrete curve have (including the point at infinity). In this case it is 109 (observe `"order": 109` in the JSON result). 
+He uses _k = 103_ to restrict the curve onto the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> prime field. He determines the _order_ of the field, by working out how many points the discrete curve has (including the point at infinity). In this case it is 109 (observe `"order": 109` in the JSON result). 
 
 `
 NOTE: This will most probably involve some programming. You may choose a programming language of your liking, whatever you're the most comfortable with. Most programming languages have very good support for JSON parsing and output (including Java, C#, Python and JavaScript), so you can even rely on your programme to produce the required JSON output. 
 `
 
-Then, using his 2 points, _P(19, 97)_ and _Q(27, 81)_, he does the modulo addition (`modk-add`) over the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> field: _R = P + Q_, which gives = _R(61, 90)_. Note the result under the `modk-add` hash in the JSON result. He also does the modulo multiplication (`modk-mul`): _S = nP_, using _n = 3_ and _P(19, 97)_, which gives = _S(63, 46)_. Note the result under the `modk-mul` hash in the JSON result.
+Then, using his 2 points, _P(19, 97)_ and _Q(27, 81)_, he does the modulo addition (`modk-add`) over the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> field: _R = P + Q_, which gives _R = R(61, 90)_. Note the result under the `modk-add` hash in the JSON result. He also does the modulo multiplication (`modk-mul`): _S = nP_, using _n = 3_ and _P(19, 97)_, which gives _S = S(63, 46)_. Note the result under the `modk-mul` hash in the JSON result.
 
 <p align="center"><b>[END OF COURSEWORK ASSIGNMENT 1]</b></p>
