@@ -103,3 +103,22 @@ NOTE: This will most probably involve some programming. You may choose a program
 Then, using his 2 points, _P(19, 97)_ and _Q(27, 81)_, he does the modulo addition (`modk-add`) over the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> field: _R = P + Q_, which gives _R = R(61, 90)_. Note the result under the `modk-add` hash in the JSON result. He also does the modulo multiplication (`modk-mul`): _S = nP_, using _n = 3_ and _P(19, 97)_, which gives _S = S(63, 46)_. Note the result under the `modk-mul` hash in the JSON result.
 
 <p align="center"><b>[END OF COURSEWORK ASSIGNMENT 1]</b></p>
+
+## Coursework assignment 2
+
+__IMPORTANT:__ This coursework builds on the first coursework and assumes that you have an understanding of what Elliptic Curve Cryptography (ECC) is and how it works. Furthermore, it reuses the curve you were given in coursework 1 and the point you had to use for modular multiplication. So, please refer to the email you received that contains the unique set of numbers you used for coursework 1.
+
+The aim of this coursework is to show evidence of understanding of the Elliptic curve Diffie-Hellman (ECDH) key exchange protocol, which allows two parties, each having an elliptic curve public–private key pair, to establish a shared secret over an insecure channel. This shared secret may be directly used as a key, or to derive another key which can then be used to encrypt subsequent communications using a symmetric key cipher. It is a variant of the Diffie-Hellman protocol using elliptic curve cryptography.
+
+The following example will illustrate how a key establishment is made. Suppose Alice wants to establish a shared key with Bob, but the only channel available for them may be eavesdropped by a third party. Initially, the domain parameters (that is, _(k, a, b, G)_) must be agreed upon. 
+
+`
+_a_ and _b_ deteremine the curve and are the same that you were given in Coursework 1. _k_ restricts the curve to a prime field 𝔽<sub>k</sub> and is the same that you were given in Coursework 1. _G_ is a generator, a point in the field, that you should use to be the same as _P_, that you you used in Coursework 1 for the modular multiplication.
+`
+
+Also, each party must have a key pair suitable for elliptic curve cryptography, consisting of a private key _d_ (a randomly selected integer in the interval _(1, n-1]_, where _n_ is the order of the field) and a public key _Q_ (where _Q = dG_, that is, the result of adding _G_ together _d_ times). Let Alice's key pair be _(d<sub>A</sub>, Q<sub>A</sub>) and Bob's key pair be _(d<sub>B</sub>}, Q<sub>B</sub>). Each party must know the other party's public key prior to execution of the protocol.
+
+Alice computes _(x<sub>k</sub>, y<sub>>k</sub>) = d<sub>A<sub/>Q<sub>B</sub>. Bob computes (x<sub>k</sub>, y<sub>k</sub>)=d<sub>BQ<sub>A</sub>. The shared secret is x_{k} 
+
+<p align="center"><b>[END OF COURSEWORK ASSIGNMENT 2]</b></p>
+
