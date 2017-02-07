@@ -116,7 +116,7 @@ The following example will illustrate how a key establishment is made. Suppose A
 
 Also, each party must have a key pair suitable for elliptic curve cryptography, consisting of a private key _d_ (a randomly selected integer in the interval _(1, n-1]_, where _n_ is the order of the field) and a public key _Q_ (where _Q = dG_, that is, the result of adding _G_ together _d_ times). Let Alice's key pair be _(d<sub>A</sub>, Q<sub>A</sub>)_ and Bob's key pair be _(d<sub>B</sub>, Q<sub>B</sub>)_. Each party must know the other party's public key prior to execution of the protocol.
 
-Alice computes _(x<sub>k</sub>, y<sub>>k</sub>) = d<sub>A</sub>Q<sub>B</sub>_. Bob computes _(x<sub>k</sub>, y<sub>k</sub>)=d<sub>B</sub>Q<sub>A</sub>_. The shared secret is x<sub>k</sub> (the _x_ coordinate of the point).  
+Alice computes _(x<sub>k</sub>, y<sub>k</sub>) = d<sub>A</sub>Q<sub>B</sub>_. Bob computes _(x<sub>k</sub>, y<sub>k</sub>)=d<sub>B</sub>Q<sub>A</sub>_. The shared secret is x<sub>k</sub> (the _x_ coordinate of the point).  
 
 ### Parameters
 
@@ -172,8 +172,8 @@ He would submit the following JSON, which reflects a correct solution:
         }
       },
       "bob" : {
-        "da" : 17,
-        "qa" : {
+        "db" : 17,
+        "qb" : {
           "x": 22,
           "y": 76
         }
@@ -186,7 +186,9 @@ He would submit the following JSON, which reflects a correct solution:
   }
 }
 ```
-
+`
+NOTE: P(x, y) = g(x, y) = (19, 97) is the generator and is given. da = 13 and db = 17 are chosen randomly. qa(x, y) abd qb(x, y) are computed; so is key(x, y), which is the shared key between Alice and Bob. 
+`
 
 <p align="center"><b>[END OF COURSEWORK ASSIGNMENT 2]</b></p>
 
