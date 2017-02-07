@@ -118,5 +118,75 @@ Also, each party must have a key pair suitable for elliptic curve cryptography, 
 
 Alice computes _(x<sub>k</sub>, y<sub>>k</sub>) = d<sub>A<sub/>Q<sub>B</sub>_. Bob computes _(x<sub>k</sub>, y<sub>k</sub>)=d<sub>BQ<sub>A</sub>_. The shared secret is x<sub>k</sub> (the _x_ coordinate of the point).  
 
+### Parameters
+
+For the elliptic curve please use the same _a_ and _b_ values that you were given in coursework 1. Furthermore, please use the _P_ point that you used in coursework 1 for the modular multiplication exercise for the generator (_G_) in coursework 2.
+
+### Report
+
+Please write a report using the following skeleton:
+
+1. Show in detail all the steps of the key exchange protocol, with the calculation expanded using the numbers you were given. For the private keys (_d<sub>A</sub>_ and _d<sub>B</sub>_) you may choose any number in the _[11, n-1]_, where _n_ is the order of the field.
+2. How do Alice and Bob arrive to the same shared secret?
+3. If Carol is intercepting the communication and captures _Q<sub>A</sub>_ and _Q<sub>B</sub>_, can she compute Alice's and Bob's private key?
+4. A more sophisticated attack by Carol involves generating _(d<sub>C</sub>, Q<sub>C</sub>)_ for use as a reset value, using the values of _a_, _b_, _k_ and _G_. Explain how would this work.
+
+Show all your work. You must include in-text citation and provide a detailed references section at the end of your coursework (see [How to avoid plagiarism](https://computing.elearning.london.ac.uk/mod/page/view.php?id=5176) in Study Support on the VLE.) Please note, that there is no need to copy-paste entire explanations or mathematical proofs. A simple sketch that demonstrates your understanding is enough and it should be based around the calculations with your own numbers (the numbers you were given).
+
+### Submission requirements
+The report should be submitted as a PDF document, following a _strict naming scheme_: *StudentName_{srn}_CO3326_cw2.pdf*. For example, if your name is _Mark Zuckerberg_ and your SRN is _000000001_, your report submission will be *MarkZuckerberg_000000001_CO3326_cw2.pdf*. Your report will count as __60%__ of your CW2 mark.
+
+In addition to your report, you will also submit a JSON file, which also follows a _strict format_ and _naming scheme_ and summarizes the results of your calculations. This will count as __40%__ of your CW1 and will be automatically checked by an algorithm, so pay particular attention to its format. 
+
+The name of the file should be *StudentName_{srn}_CO3326_cw2.json*; for example, if your name is _Mark Zuckerberg_ and your SRN is _000000001_, your JSON submission will be *MarkZuckerberg_000000001_CO3326_cw2.json*. You can use the following well-formed JSON and adapt it for your numbers and your calculation results. 
+
+A hypothetical student, _Mark Zuckerberg_, with SRN _000000001_, received the following numbers:
+
+| SRN       | Name            |  a  |  b  |  k  |  Px |  Py |  Qx |  Qy |  n  |
+| --------- |:----------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 000000001	| MARK ZUCKERBERG |  -2 |  13 | 103 |  19 |  97 |  27 |  81 |  3  |
+
+He would submit the following JSON, which reflects a correct solution:
+
+```json
+{
+  "name": "MARK ZUCKERBERG",
+  "srn": "000000001",
+  "ecc": {
+    "a": -2,
+    "b": 13,
+    "k": 103,
+    "order": 109,
+    "g": {
+      "x": 19,
+      "y": 97
+    },
+  },
+  "assignment": {
+    "key_exchange": {
+      "alice" : {
+        "da" : 13
+        "qa" : {
+          "x": 58,
+          "y": 37
+        }
+      },
+      "bob" : {
+        "da" : 17
+        "qa" : {
+          "x": 22,
+          "y": 76
+        }
+      },
+      "key": {
+        "x": 63,
+        "y": 46
+      }
+    }
+  }
+}
+```
+
+
 <p align="center"><b>[END OF COURSEWORK ASSIGNMENT 2]</b></p>
 
