@@ -110,15 +110,13 @@ __IMPORTANT:__ This coursework builds on the first coursework and assumes that y
 
 The aim of this coursework is to show evidence of understanding of the Elliptic curve Diffie-Hellman (ECDH) key exchange protocol, which allows two parties, each having an elliptic curve public–private key pair, to establish a shared secret over an insecure channel. This shared secret may be directly used as a key, or to derive another key which can then be used to encrypt subsequent communications using a symmetric key cipher. It is a variant of the Diffie-Hellman protocol using elliptic curve cryptography.
 
-The following example will illustrate how a key establishment is made. Suppose Alice wants to establish a shared key with Bob, but the only channel available for them may be eavesdropped by a third party. Initially, the domain parameters (that is, _(k, a, b, G)_) must be agreed upon. 
+### Protocol
 
-`
-_a_ and _b_ deteremine the curve and are the same that you were given in Coursework 1. _k_ restricts the curve to a prime field 𝔽<sub>k</sub> and is the same that you were given in Coursework 1. _G_ is a generator, a point in the field, that you should use to be the same as _P_, that you you used in Coursework 1 for the modular multiplication.
-`
+The following example will illustrate how a key establishment is made. Suppose Alice wants to establish a shared key with Bob, but the only channel available for them may be eavesdropped by a third party. Initially, the domain parameters (that is, _(k, a, b, G)_) must be agreed upon. _a_ and _b_ deteremine the curve; _k_ restricts the curve to a prime field 𝔽<sub>k</sub>. _G_ is a generator, a point in the field.
 
-Also, each party must have a key pair suitable for elliptic curve cryptography, consisting of a private key _d_ (a randomly selected integer in the interval _(1, n-1]_, where _n_ is the order of the field) and a public key _Q_ (where _Q = dG_, that is, the result of adding _G_ together _d_ times). Let Alice's key pair be _(d<sub>A</sub>, Q<sub>A</sub>) and Bob's key pair be _(d<sub>B</sub>}, Q<sub>B</sub>). Each party must know the other party's public key prior to execution of the protocol.
+Also, each party must have a key pair suitable for elliptic curve cryptography, consisting of a private key _d_ (a randomly selected integer in the interval _(1, n-1]_, where _n_ is the order of the field) and a public key _Q_ (where _Q = dG_, that is, the result of adding _G_ together _d_ times). Let Alice's key pair be _(d<sub>A</sub>, Q<sub>A</sub>)_ and Bob's key pair be _(d<sub>B</sub>, Q<sub>B</sub>)_. Each party must know the other party's public key prior to execution of the protocol.
 
-Alice computes _(x<sub>k</sub>, y<sub>>k</sub>) = d<sub>A<sub/>Q<sub>B</sub>. Bob computes (x<sub>k</sub>, y<sub>k</sub>)=d<sub>BQ<sub>A</sub>. The shared secret is x_{k} 
+Alice computes _(x<sub>k</sub>, y<sub>>k</sub>) = d<sub>A<sub/>Q<sub>B</sub>_. Bob computes _(x<sub>k</sub>, y<sub>k</sub>)=d<sub>BQ<sub>A</sub>_. The shared secret is x<sub>k</sub> (the _x_ coordinate of the point).  
 
 <p align="center"><b>[END OF COURSEWORK ASSIGNMENT 2]</b></p>
 
