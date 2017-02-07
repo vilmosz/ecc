@@ -116,7 +116,7 @@ The following example will illustrate how a key establishment is made. Suppose A
 
 Also, each party must have a key pair suitable for elliptic curve cryptography, consisting of a private key _d_ (a randomly selected integer in the interval _(1, n-1]_, where _n_ is the order of the field) and a public key _Q_ (where _Q = dG_, that is, the result of adding _G_ together _d_ times). Let Alice's key pair be _(d<sub>A</sub>, Q<sub>A</sub>)_ and Bob's key pair be _(d<sub>B</sub>, Q<sub>B</sub>)_. Each party must know the other party's public key prior to execution of the protocol.
 
-Alice computes _(x<sub>k</sub>, y<sub>>k</sub>) = d<sub>A<sub/>Q<sub>B</sub>_. Bob computes _(x<sub>k</sub>, y<sub>k</sub>)=d<sub>BQ<sub>A</sub>_. The shared secret is x<sub>k</sub> (the _x_ coordinate of the point).  
+Alice computes _(x<sub>k</sub>, y<sub>>k</sub>) = d<sub>A</sub>Q<sub>B</sub>_. Bob computes _(x<sub>k</sub>, y<sub>k</sub>)=d<sub>B</sub>Q<sub>A</sub>_. The shared secret is x<sub>k</sub> (the _x_ coordinate of the point).  
 
 ### Parameters
 
@@ -129,7 +129,7 @@ Please write a report using the following skeleton:
 1. Show in detail all the steps of the key exchange protocol, with the calculation expanded using the numbers you were given. For the private keys (_d<sub>A</sub>_ and _d<sub>B</sub>_) you may choose any number in the _[11, n-1]_, where _n_ is the order of the field.
 2. How do Alice and Bob arrive to the same shared secret?
 3. If Carol is intercepting the communication and captures _Q<sub>A</sub>_ and _Q<sub>B</sub>_, can she compute Alice's and Bob's private key?
-4. A more sophisticated attack by Carol involves generating _(d<sub>C</sub>, Q<sub>C</sub>)_ for use as a reset value, using the values of _a_, _b_, _k_ and _G_. Explain how would this work.
+4. A more sophisticated attack by Carol involves generating _(d<sub>C</sub>, Q<sub>C</sub>)_ for use as a reset value, using the same values of _a_, _b_, _k_ and _G_ that Alice and Bob are using. Explain how would this work.
 
 Show all your work. You must include in-text citation and provide a detailed references section at the end of your coursework (see [How to avoid plagiarism](https://computing.elearning.london.ac.uk/mod/page/view.php?id=5176) in Study Support on the VLE.) Please note, that there is no need to copy-paste entire explanations or mathematical proofs. A simple sketch that demonstrates your understanding is enough and it should be based around the calculations with your own numbers (the numbers you were given).
 
@@ -165,14 +165,14 @@ He would submit the following JSON, which reflects a correct solution:
   "assignment": {
     "key_exchange": {
       "alice" : {
-        "da" : 13
+        "da" : 13,
         "qa" : {
           "x": 58,
           "y": 37
         }
       },
       "bob" : {
-        "da" : 17
+        "da" : 17,
         "qa" : {
           "x": 22,
           "y": 76
