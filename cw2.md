@@ -88,7 +88,7 @@ Using his _a_ and _b_ values, the generic elliptic curve, defined by _y<sup>2</s
 
 He uses _k = 103_ to restrict the curve onto the 𝔽<sub>k</sub> = 𝔽<sub>103</sub> prime field. He determines the _order_ of the field, by working out how many points the discrete curve has (including the point at infinity). In this case it is 109 (observe `"order": 109` in the JSON result). 
 
-Then, using his point, _P(19, 97)_ as a _generator_ g(x, y) = P(x, y) = (19, 97) and choosing randomly Alice's and Bob's private key, _d<sub>a</sub> = 13_ and _d<sub>b</sub> = 17_, he computes the corresponding public keys _Q<sub>a</sub>(x, y)_ and _Q<sub>b</sub>(x, y)_, and the shared key between Alice and Bob _key(x, y)_. Note the results in the JSON output.
+Then, using his point, _P(19, 97)_ as a generator _g(x, y) = P(x, y) = (19, 97)_ and choosing randomly Alice's and Bob's private key, _d<sub>a</sub> = 13_ and _d<sub>b</sub> = 17_, he computes the corresponding public keys _Q<sub>a</sub>(x, y)_ and _Q<sub>b</sub>(x, y)_, and the shared key between Alice and Bob _key(x, y)_. Note the results in the JSON output.
 
 `
 NOTE: Most programming languages have very good support for JSON parsing and output (including Java, C#, Python and JavaScript), so you can even rely on your programme to produce the required JSON output. 
