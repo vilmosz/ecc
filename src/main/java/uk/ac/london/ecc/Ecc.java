@@ -5,16 +5,18 @@ public class Ecc {
 	private Long a;
 	private Long b;
 	private Long k;
+	private Long order;
 
 	public Ecc() {
 		super();
 	}
 
-	public Ecc(Long a, Long b, Long k) {
+	public Ecc(Long a, Long b, Long k, Long order) {
 		super();
 		this.a = a;
 		this.b = b;
 		this.k = k;
+		this.order = order;
 	}
 
 	@Override
@@ -82,5 +84,13 @@ public class Ecc {
 	public void setK(Long k) {
 		this.k = k;
 	}
-		
+
+	public Long getOrder() {
+		return order;
+	}
+
+	public void setOrder(Long order) {
+		this.order = order;
+	}
+	
 }

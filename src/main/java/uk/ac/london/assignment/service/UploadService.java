@@ -51,7 +51,7 @@ public class UploadService {
 		Student student = new Student();
 		student.setId(csv.getStudentCode());
 		student.setName(csv.getName().trim().replaceAll("\\s+", " "));
-		student.setEcc(new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue()));
+		student.setEcc(new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue(), csv.getOrder().longValue()));
 		ModkAdd ex1 = new ModkAdd();
 		ex1.setP(new Point(csv.getPx(), csv.getPy()));
 		ex1.setQ(new Point(csv.getQx(), csv.getQy()));		

@@ -19,9 +19,10 @@
 			<tr>
 				<th rowspan="2">Student code</th>
 				<th rowspan="2">Name</th>
-				<th colspan="3" rowspan="1">Curve/field parameters</th>
+				<th colspan="4" rowspan="1">Curve/field parameters</th>
 				<th colspan="2" rowspan="1">P</th>
 				<th colspan="2" rowspan="1">Q</th>
+				<th colspan="2" rowspan="1">R</th>
 				<th rowspan="2">n</th>
 				<th colspan="4" rowspan="1">Solution</th>
 			</tr>
@@ -29,6 +30,9 @@
 				<th>a</th>
 				<th>b</th>
 				<th>k</th>			
+				<th>order</th>			
+				<th>X</th>
+				<th>Y</th>
 				<th>X</th>
 				<th>Y</th>
 				<th>X</th>
@@ -46,10 +50,13 @@
 				<td th:text="${student.ecc.a}" />
 				<td th:text="${student.ecc.b}" />
 				<td th:text="${student.ecc.k}" />
+				<td th:text="${student.ecc.order}" />
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].p.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].p.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].r.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].r.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td th:text="${#numbers.formatDecimal(student.assignment['modk-mul'].n, 0, 'DEFAULT', 0, 'DEFAULT')}" />
 				<td><a th:href="@{modk-add.html(id=${student.id})}">modk-add</a></td>
 				<td><a th:href="@{modk-mul.html(id=${student.id})}">modk-mul</a></td>

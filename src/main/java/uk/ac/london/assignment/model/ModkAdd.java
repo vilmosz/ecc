@@ -2,7 +2,6 @@ package uk.ac.london.assignment.model;
 
 import java.awt.Point;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("modk-add")
@@ -30,7 +29,6 @@ public class ModkAdd extends Exercise {
 		this.q = q;
 	}
 
-	@JsonIgnore
 	public Point getR() {
 		return r;
 	}
