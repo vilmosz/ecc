@@ -7,9 +7,9 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.2.RELEASE</version>		
+		<version>1.5.2.RELEASE</version>
 	</parent>
-	
+
 	<groupId>uk.ac.london</groupId>
 	<artifactId>ecc</artifactId>
 	<version>0.0.1</version>
@@ -17,18 +17,18 @@
 
 	<name>CO3326 Coursework 2016/17</name>
 	<description>CO3326 Coursework 2016/17</description>
-	
+
 	<organization>
 		<name>University of London</name>
 		<url>http://www.london.ac.uk</url>
 	</organization>
-	
+
 	<properties>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target> 		
+        <maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<profiles>
@@ -38,17 +38,17 @@
 	            <activeByDefault>true</activeByDefault>
 	        </activation>
 	        <properties>
-	        	<mongodb.uri>mongodb://sa:sa@192.168.0.2:27017/ecc</mongodb.uri>	        	
+	        	<mongodb.uri>mongodb://localhost:27017/ecc</mongodb.uri>
 	        </properties>
 	    </profile>
 	    <profile>
 	        <id>prod</id>
-	        <properties>    
-	        	<mongodb.uri>mongodb://${user}:${password}@172.16.100.86:27017/ecc</mongodb.uri>	        	
+	        <properties>
+	        	<mongodb.uri>mongodb://${user}:${password}@172.16.100.86:27017/ecc</mongodb.uri>
 	        </properties>
 	    </profile>
 	</profiles>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>		
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -82,29 +82,29 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-csv</artifactId>
 		</dependency>
-        
+
 		<!-- Google collection -->
 		<dependency>
 		    <groupId>com.google.collections</groupId>
 		    <artifactId>google-collections</artifactId>
 		    <version>1.0</version>
 		</dependency>
-        				
+
 		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- 
+		<!--
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
-		</dependency>	
+		</dependency>
 		-->
 	</dependencies>
-		
+
 	<build>
         <finalName>${project.artifactId}</finalName>
         <resources>
@@ -125,12 +125,17 @@
                 </excludes>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>			
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<configuration>
@@ -140,7 +145,7 @@
 					</delimiters>
 					<useDefaultDelimiters>false</useDefaultDelimiters>
 				</configuration>
-			</plugin>     			
+			</plugin>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
@@ -169,9 +174,9 @@
                             <artifactId>${project.artifactId}</artifactId>
                             <type>${project.packaging}</type>
                         </deployable>
-                    </deployables>                    
-                </configuration>                 
-            </plugin>            
+                    </deployables>
+                </configuration>
+            </plugin>
 		</plugins>
-	</build>	
+	</build>
 </project>

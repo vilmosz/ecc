@@ -17,18 +17,27 @@ public class Student {
 	private Ecc ecc;
 	private Map<String, Exercise> assignment;
 
-	public Student() {}
+	public Student() {
+	    // empty constructor
+	}
+
+    public Student(final Student student) {
+        this.id = student.getId();
+        this.name = student.getName();
+        this.ecc = student.getEcc();
+        this.assignment = student.getAssignment();
+    }
 
 	public void addAssignment(Exercise exercise) {
 		if (assignment == null)
 			assignment = new HashMap<>();
-		assignment.put(exercise.getExercise(), exercise);		
+		assignment.put(exercise.getExercise(), exercise);
 	}
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public String getSrn() {
 		return getId();
 	}
