@@ -1,5 +1,6 @@
 package uk.ac.london.assignment.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,15 +40,16 @@ public class AssessmentService {
     }
 
     public Assessment assess(final String filename) throws IOException {
-        Resource file = null;
-        file = new PathResource(filename);
-        if (!file.exists() || !file.isReadable()) {
-            file = new ClassPathResource(filename);
-        }
-        if (file.exists() && file.isReadable()) {
-            return assess(file.getInputStream());
+        File file = new File(filename);
+        Resource resource = null;
+        if (file.exists() && file.canRead())
+        	resource = new PathResource(file.toURI());
+        else        	
+            resource = new ClassPathResource(filename);
+        if (resource.exists() && resource.isReadable()) {
+            return assess(resource.getInputStream());
         } else {
-            logger.debug("Can't open file: {}", filename);
+            logger.warn("Can't open [{}]", filename);
             throw new IOException("Can't open file: " + filename);
         }
     }

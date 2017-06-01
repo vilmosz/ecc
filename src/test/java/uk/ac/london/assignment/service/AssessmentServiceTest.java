@@ -18,15 +18,22 @@ import uk.ac.london.assignment.model.Assessment;
 @ActiveProfiles({ "test" })
 public class AssessmentServiceTest {
 
-    public static final String TEST_JSON = "MARK%20ZUCKERBERG_000000001_assignsubmission_file_MarkZuckerberg_123456789_CO3326_cw1.json";
+    public static final String GOOD_JSON	= "MARK ZUCKERBERG_000000001_assignsubmission_file_MarkZuckerberg_123456789_CO3326_cw1.json";
+    public static final String BAD_JSON		= "MARK ZUCKERBERG_000000002_assignsubmission_file_MarkZuckerberg_012345678_CO3326_cw2.json";
 
     @Autowired
     AssessmentService assessmentService;
 
     @Test
-    public void assessTest() throws IOException {
-        Assessment assesment = assessmentService.assess(TEST_JSON);
+    public void assessTest_GoodJson() throws IOException {
+        Assessment assesment = assessmentService.assess(GOOD_JSON);
         assertNotNull(assesment);
     }
 
+    @Test
+    public void assessTest_BadJson() throws IOException {
+        Assessment assesment = assessmentService.assess(BAD_JSON);
+        assertNotNull(assesment);
+    }
+    
 }

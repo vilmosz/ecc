@@ -42,6 +42,12 @@
 	        </properties>
 	    </profile>
 	    <profile>
+	        <id>home</id>
+	        <properties>
+	        	<mongodb.uri>mongodb://sa:sa@macpro:27017/ecc</mongodb.uri>
+	        </properties>
+	    </profile>
+	    <profile>
 	        <id>prod</id>
 	        <properties>
 	        	<mongodb.uri>mongodb://${user}:${password}@172.16.100.86:27017/ecc</mongodb.uri>
@@ -89,6 +95,12 @@
 		    <artifactId>google-collections</artifactId>
 		    <version>1.0</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.5</version>
+		</dependency>		
 
 		<!-- Test -->
 		<dependency>

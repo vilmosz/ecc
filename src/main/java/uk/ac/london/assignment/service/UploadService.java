@@ -5,19 +5,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
-import uk.ac.london.assignment.model.ModkAdd;
-import uk.ac.london.assignment.model.ModkMul;
+import uk.ac.london.assignment.model.Exercise;
+import uk.ac.london.assignment.model.Exercise.Type;
 import uk.ac.london.assignment.model.Student;
 import uk.ac.london.assignment.repository.StudentRepository;
 import uk.ac.london.ecc.Ecc;
@@ -25,12 +30,44 @@ import uk.ac.london.ecc.Ecc;
 @Service
 public class UploadService {
 
-	private static final Log logger = LogFactory.getLog(UploadService.class);
+	private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
+	
+	private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_CO.*");
 
 	@Autowired
 	private StudentRepository repository;
 
-	public List<Student> loadStudents(InputStream inputStream) throws JsonProcessingException, IOException {
+	public Student loadJson(final String content, final String filename) {
+		Student student = null;
+        ObjectMapper mapper = new ObjectMapper();
+		try {
+			logger.info("Load {}", filename);
+			student = mapper.readValue(content, Student.class);	
+			student.setFile(filename);
+		} catch (JsonParseException | JsonMappingException e) {
+			student = parseFilename(filename);
+			logger.warn("{} / {}", filename, e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		repository.save(student);		
+		return student;
+	}
+	
+	private Student parseFilename(final String filename) {
+		logger.info("Parse filename [{}]", filename);
+		Student student = new Student();
+		student.setFile(filename);
+	    Matcher m = pattern.matcher(filename);
+	    if (m.find()) {
+	    	student.setName(m.group(1));
+	    	student.setSrn(m.group(3));
+	    }
+	    return student;
+	}
+	
+	public List<Student> loadCsv(final InputStream inputStream) throws JsonProcessingException, IOException {
 		CsvSchema schema = CsvSchema.emptySchema().withHeader();
 		CsvMapper mapper = new CsvMapper();
 		MappingIterator<uk.ac.london.assignment.model.csv.Student> reader = mapper
@@ -38,7 +75,7 @@ public class UploadService {
 		List<Student> students = new ArrayList<>();
 		while (reader.hasNextValue()) {
 			uk.ac.london.assignment.model.csv.Student csv = reader.nextValue();
-			logger.debug(csv);
+			logger.debug("{}", csv);
 			Student student = createStudent(csv);
 			if (student != null) {
 				students.add(student);
@@ -46,20 +83,22 @@ public class UploadService {
 		}
 		return students;
 	}
-
-	public Student createStudent(uk.ac.london.assignment.model.csv.Student csv) {
+	
+	private Student createStudent(uk.ac.london.assignment.model.csv.Student csv) {
 		Student student = new Student();
 		student.setId(csv.getStudentCode());
 		student.setName(csv.getName().trim().replaceAll("\\s+", " "));
 		student.setEcc(new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue(), csv.getOrder().longValue()));
-		ModkAdd ex1 = new ModkAdd();
+		Exercise ex1 = new Exercise();
 		ex1.setP(new Point(csv.getPx(), csv.getPy()));
 		ex1.setQ(new Point(csv.getQx(), csv.getQy()));		
-		ex1.setR(new Point(csv.getRx(), csv.getRy()));		
+		ex1.setR(new Point(csv.getRx(), csv.getRy()));
+		ex1.setType(Type.MODK_ADD);
 		student.addAssignment(ex1);
-		ModkMul ex2 = new ModkMul();
+		Exercise ex2 = new Exercise();
 		ex2.setP(new Point(csv.getPx(), csv.getPy()));
 		ex2.setN(3);		
+		ex2.setType(Type.MODK_MUL);
 		student.addAssignment(ex2);
 		repository.save(student);
 		return student;

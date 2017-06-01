@@ -1,12 +1,12 @@
 {
 	"name": "MARK ZUCKERBERG",
-	"srn": "000000001",
-	"ecc": {
-		"a": -2,
-		"b": 13,
-		"k": 103,
-		"order": 109
-	},
+	"srn": "000000002",
+	"ecc": [
+		"a:-8",
+		"b:11",
+		"k:173",
+		"order:179"
+	],
 	"assignment": {
 		"modk-add": {
 			"p": {

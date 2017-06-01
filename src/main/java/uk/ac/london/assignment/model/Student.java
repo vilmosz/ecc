@@ -16,6 +16,7 @@ public class Student {
 	private String name;
 	private Ecc ecc;
 	private Map<String, Exercise> assignment;
+	private String file;
 
 	public Student() {
 	    // empty constructor
@@ -31,7 +32,7 @@ public class Student {
 	public void addAssignment(Exercise exercise) {
 		if (assignment == null)
 			assignment = new HashMap<>();
-		assignment.put(exercise.getExercise(), exercise);
+		assignment.put(exercise.getType().toString(), exercise);
 	}
 
 	public String getId() {
@@ -68,6 +69,18 @@ public class Student {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public void setSrn(String srn) {
+		setId(srn);
+	}
+		
+	public String getFile() {
+		return file;
+	}
+
+	public void setFile(String file) {
+		this.file = file;
 	}
 
 	@Override
