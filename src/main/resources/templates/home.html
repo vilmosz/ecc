@@ -29,8 +29,8 @@
 			<tr>
 				<th>a</th>
 				<th>b</th>
-				<th>k</th>			
-				<th>order</th>			
+				<th>k</th>
+				<th>order</th>
 				<th>X</th>
 				<th>Y</th>
 				<th>X</th>
@@ -47,17 +47,25 @@
 			<tr th:each="student : ${students}">
 				<td th:text="${student.id}" />
 				<td th:text="${student.name}" />
-				<td th:text="${student.ecc.a}" />
-				<td th:text="${student.ecc.b}" />
-				<td th:text="${student.ecc.k}" />
-				<td th:text="${student.ecc.order}" />
-				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].p.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
-				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].p.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
-				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
-				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].q.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
-				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].r.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
-				<td th:text="${#numbers.formatDecimal(student.assignment['modk-add'].r.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
-				<td th:text="${#numbers.formatDecimal(student.assignment['modk-mul'].n, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${student.ecc?.a}" />
+				<td th:text="${student.ecc?.b}" />
+				<td th:text="${student.ecc?.k}" />
+				<td th:text="${student.ecc?.order}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${student.assignment['modk-add']?.p?.x}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${student.assignment['modk-add']?.p?.y}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${student.assignment['modk-add']?.q?.x}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${student.assignment['modk-add']?.q?.y}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${student.assignment['modk-add']?.r?.x}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${student.assignment['modk-add']?.r?.y}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-mul')} ? ${student.assignment['modk-mul']?.n}" />
+				<!--
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${#numbers.formatDecimal(student.assignment['modk-add']?.p?.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${#numbers.formatDecimal(student.assignment['modk-add']?.q?.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${#numbers.formatDecimal(student.assignment['modk-add']?.q?.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${#numbers.formatDecimal(student.assignment['modk-add']?.r?.x, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-add')} ? ${#numbers.formatDecimal(student.assignment['modk-add']?.r?.y, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				<td th:text="${student.assignment != null and student.assignment.containsKey('modk-mul')} ? ${#numbers.formatDecimal(student.assignment['modk-mul']?.n, 0, 'DEFAULT', 0, 'DEFAULT')}" />
+				-->
 				<td><a th:href="@{modk-add.html(id=${student.id})}">modk-add</a></td>
 				<td><a th:href="@{modk-mul.html(id=${student.id})}">modk-mul</a></td>
 				<td><a th:href="@{reals-add.html(id=${student.id})}">real-add</a></td>

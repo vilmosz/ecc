@@ -28,19 +28,19 @@ import uk.ac.london.assignment.service.UploadService;
 public class FileUploadController {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
-	
+
     private final Set<String> compressedMimeTypes = ImmutableSet.<String>builder()
             .add("application/zip")
             .add("application/octet-stream")
             .add("application/x-zip-compressed")
-            .build();	
+            .build();
 
 	@Autowired
 	private UploadService uploadService;
 
 	@PostMapping(value = "/api/upload-students", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<Student> uploadStudents(@RequestParam("file") MultipartFile file) throws IOException {
-		logger.info(String.format("File [%s] has been uploaded", file.getOriginalFilename()));
+		logger.info("File [{}] has been uploaded", file.getOriginalFilename());
         final String mimeType = file.getContentType();
 		try {
 	        if (isCompressed(mimeType)) {
@@ -57,7 +57,7 @@ public class FileUploadController {
 	                    	students.add(student);
 	                    zis.closeEntry();
 	                }
-	            }	        	
+	            }
 	            return students;
 	        } else {
 	            logger.info("Storing simple file [{}] of type [{}]", file.getOriginalFilename(), file.getContentType());
@@ -68,10 +68,10 @@ public class FileUploadController {
 			throw e;
 		}
 	}
-	
+
     private final Boolean isCompressed(final String mimeType) {
         return compressedMimeTypes.contains(mimeType);
     }
-	
+
 
 }

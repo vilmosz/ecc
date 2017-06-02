@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +30,7 @@ import uk.ac.london.ecc.Ecc;
 public class UploadService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
-	
+
 	private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_CO.*");
 
 	@Autowired
@@ -42,19 +41,19 @@ public class UploadService {
         ObjectMapper mapper = new ObjectMapper();
 		try {
 			logger.info("Load {}", filename);
-			student = mapper.readValue(content, Student.class);	
+			student = mapper.readValue(content, Student.class);
 			student.setFile(filename);
 		} catch (JsonParseException | JsonMappingException e) {
+		    logger.trace("{}", e);
 			student = parseFilename(filename);
 			logger.warn("{} / {}", filename, e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            logger.error("{} / {}", filename, e);
 		}
-		repository.save(student);		
+		repository.save(student);
 		return student;
 	}
-	
+
 	private Student parseFilename(final String filename) {
 		logger.info("Parse filename [{}]", filename);
 		Student student = new Student();
@@ -66,8 +65,8 @@ public class UploadService {
 	    }
 	    return student;
 	}
-	
-	public List<Student> loadCsv(final InputStream inputStream) throws JsonProcessingException, IOException {
+
+	public List<Student> loadCsv(final InputStream inputStream) throws IOException {
 		CsvSchema schema = CsvSchema.emptySchema().withHeader();
 		CsvMapper mapper = new CsvMapper();
 		MappingIterator<uk.ac.london.assignment.model.csv.Student> reader = mapper
@@ -76,14 +75,11 @@ public class UploadService {
 		while (reader.hasNextValue()) {
 			uk.ac.london.assignment.model.csv.Student csv = reader.nextValue();
 			logger.debug("{}", csv);
-			Student student = createStudent(csv);
-			if (student != null) {
-				students.add(student);
-			}
+			students.add(createStudent(csv));
 		}
 		return students;
 	}
-	
+
 	private Student createStudent(uk.ac.london.assignment.model.csv.Student csv) {
 		Student student = new Student();
 		student.setId(csv.getStudentCode());
@@ -91,17 +87,16 @@ public class UploadService {
 		student.setEcc(new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue(), csv.getOrder().longValue()));
 		Exercise ex1 = new Exercise();
 		ex1.setP(new Point(csv.getPx(), csv.getPy()));
-		ex1.setQ(new Point(csv.getQx(), csv.getQy()));		
+		ex1.setQ(new Point(csv.getQx(), csv.getQy()));
 		ex1.setR(new Point(csv.getRx(), csv.getRy()));
 		ex1.setType(Type.MODK_ADD);
 		student.addAssignment(ex1);
 		Exercise ex2 = new Exercise();
 		ex2.setP(new Point(csv.getPx(), csv.getPy()));
-		ex2.setN(3);		
+		ex2.setN(3);
 		ex2.setType(Type.MODK_MUL);
 		student.addAssignment(ex2);
-		repository.save(student);
-		return student;
+		return repository.save(student);
 	}
 
 }
