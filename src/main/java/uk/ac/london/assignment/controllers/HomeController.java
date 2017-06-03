@@ -7,20 +7,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import uk.ac.london.assignment.model.Assessment;
 import uk.ac.london.assignment.model.Student;
+import uk.ac.london.assignment.repository.AssessmentRepository;
 import uk.ac.london.assignment.repository.StudentRepository;
 
 @Controller
 public class HomeController {
 	
 	@Autowired
-	private StudentRepository repository;
+	private StudentRepository studentRepository;
 
+	@Autowired
+	private AssessmentRepository assessmentRepository;
+	
 	@RequestMapping(value = "/")
 	public String index(Model model) {
-    	List<Student> students = repository.findAll();
-        model.addAttribute("students", students);
+    	List<Assessment> assessments = assessmentRepository.findAll();
+        model.addAttribute("assessments", assessments);
 		return "home";
 	}
 
+	@RequestMapping(value = "/submissions")
+	public String submissions(Model model) {
+    	List<Student> students = studentRepository.findAll();
+        model.addAttribute("students", students);
+		return "students";
+	}
+	
 }
