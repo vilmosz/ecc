@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -33,11 +34,18 @@ public class UploadService {
 
 	private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_CO.*");
 
+	private final StudentRepository studentRepository;
+	private final ApplicationEventPublisher eventPublisher;
+	
 	@Autowired
-	private StudentRepository repository;
-
+	public UploadService(StudentRepository studentRepository, ApplicationEventPublisher eventPublisher) {
+		this.studentRepository = studentRepository;
+		this.eventPublisher = eventPublisher;
+	}
+	
 	public Student loadJson(final String content, final String filename) {
 		Student student = null;
+        String error = null;
         ObjectMapper mapper = new ObjectMapper();
 		try {
 			logger.info("Load {}", filename);
@@ -46,11 +54,13 @@ public class UploadService {
 		} catch (JsonParseException | JsonMappingException e) {
 		    logger.trace("{}", e);
 			student = parseFilename(filename);
-			logger.warn("{} / {}", filename, e.getMessage());
+			error = e.getMessage();
+			logger.trace("{} / {}", filename, e.getMessage());
 		} catch (IOException e) {
             logger.error("{} / {}", filename, e);
 		}
-		repository.save(student);
+		studentRepository.save(student);
+		eventPublisher.publishEvent(new StudentEvent(student, error, StudentEvent.Type.ACTUAL));
 		return student;
 	}
 
@@ -75,7 +85,9 @@ public class UploadService {
 		while (reader.hasNextValue()) {
 			uk.ac.london.assignment.model.csv.Student csv = reader.nextValue();
 			logger.debug("{}", csv);
-			students.add(createStudent(csv));
+			Student student = createStudent(csv);
+			students.add(student);
+			eventPublisher.publishEvent(new StudentEvent(student, null, StudentEvent.Type.EXPECTED));			
 		}
 		return students;
 	}
@@ -96,7 +108,7 @@ public class UploadService {
 		ex2.setN(3);
 		ex2.setType(Type.MODK_MUL);
 		student.addAssignment(ex2);
-		return repository.save(student);
+		return student;
 	}
 
 }
