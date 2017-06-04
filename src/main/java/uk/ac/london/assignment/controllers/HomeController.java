@@ -1,6 +1,7 @@
 package uk.ac.london.assignment.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,9 +29,17 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/submissions")
-	public String submissions(Model model) {
+	@RequestMapping(value = "/actual")
+	public String actual(Model model) {
     	List<Student> students = studentRepository.findAll();
+        model.addAttribute("students", students);
+		return "students";
+	}
+
+	@RequestMapping(value = "/expected")
+	public String expected(Model model) {
+    	List<Assessment> assessments = assessmentRepository.findAll();    	
+    	List<Student> students = assessments.stream().map(Assessment::getExpected).collect(Collectors.toList());
         model.addAttribute("students", students);
 		return "students";
 	}

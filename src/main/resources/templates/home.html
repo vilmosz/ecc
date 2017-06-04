@@ -19,11 +19,11 @@
 			<tr>
 				<th rowspan="2">Student code</th>
 				<th rowspan="2">Name</th>
-				<th rowspan="1" th:attr="colspan=${assessments[2].results.size()}">Results</th>
+				<th rowspan="1" th:attr="colspan=${@assessmentService.getHeaders().size()}">Results</th>
 			</tr>
 			<tr>
-				<div th:each="entry: ${assessments[2].results}">
-					<th th:text="${entry.key}" />
+				<div th:each="entry: ${@assessmentService.getHeaders()}">
+					<th th:text="${entry}" />
 				</div>
 			</tr>
 		</thead>

@@ -86,6 +86,8 @@ public class UploadService {
 			uk.ac.london.assignment.model.csv.Student csv = reader.nextValue();
 			logger.debug("{}", csv);
 			Student student = createStudent(csv);
+			Exercise exercise = student.getAssignment().get(Exercise.Type.MODK_MUL.toString());
+			exercise.setS(Ecc.multiplyPoint(exercise.getP(), exercise.getN(), student.getEcc()));
 			students.add(student);
 			eventPublisher.publishEvent(new StudentEvent(student, null, StudentEvent.Type.EXPECTED));			
 		}
