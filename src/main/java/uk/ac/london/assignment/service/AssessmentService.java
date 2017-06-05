@@ -36,12 +36,12 @@ public class AssessmentService {
     	assessment.resetResults();
     	if (assessment.hasError())
     		return;
-    	match(assessment, o -> assessment.getExpected().getEcc().getA(), o -> assessment.getActual().getEcc().getA(), "a");
-    	match(assessment, o -> assessment.getExpected().getEcc().getB(), o -> assessment.getActual().getEcc().getB(), "b");
-    	match(assessment, o -> assessment.getExpected().getEcc().getK(), o -> assessment.getActual().getEcc().getK(), "k");
-    	match(assessment, o -> assessment.getExpected().getEcc().getOrder(), o -> assessment.getActual().getEcc().getOrder(), "Order");
-    	match(assessment, o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_ADD.toString())).getR(), o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_ADD.toString())).getR(), "R");
-    	match(assessment, o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_MUL.toString())).getR(), o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_MUL.toString())).getR(), "S");
+    	match(assessment, o -> assessment.getExpected().getEcc().getA(), o -> assessment.getActual().getEcc().getA(), Assessment.A_KEY);
+    	match(assessment, o -> assessment.getExpected().getEcc().getB(), o -> assessment.getActual().getEcc().getB(), Assessment.B_KEY);
+    	match(assessment, o -> assessment.getExpected().getEcc().getK(), o -> assessment.getActual().getEcc().getK(), Assessment.K_KEY);
+    	match(assessment, o -> assessment.getExpected().getEcc().getOrder(), o -> assessment.getActual().getEcc().getOrder(), Assessment.ORDER_KEY);
+    	match(assessment, o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_ADD.toString())).getR(), o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_ADD.toString())).getR(), Assessment.R_KEY);
+    	match(assessment, o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_MUL.toString())).getR(), o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_MUL.toString())).getR(), Assessment.S_KEY);
     	Integer total = Assessment.getWeights().entrySet().stream()
     		.filter(e -> e.getValue() != 0 && assessment.getResults().get(e.getKey()) != null)
     		.mapToInt(e -> e.getValue() * (Integer)assessment.getResults().get(e.getKey()))
@@ -50,7 +50,7 @@ public class AssessmentService {
     }
 
     public List<String> getHeaders() {
-    	return Assessment.getWeights().keySet().stream().collect(Collectors.toList());    	
+    	return Assessment.getWeights().keySet().stream().map(k -> k.replaceAll("^[0-9]*", "")).collect(Collectors.toList());    	
     }
     
     private void match(final Assessment assessment, Function<Assessment, Object> expected, Function<Assessment, Object> actual, String key) {
