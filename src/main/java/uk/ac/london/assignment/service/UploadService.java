@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.jayway.jsonpath.JsonPath;
 
 import uk.ac.london.assignment.model.Exercise;
 import uk.ac.london.assignment.model.Exercise.Type;
@@ -49,6 +50,8 @@ public class UploadService {
         ObjectMapper mapper = new ObjectMapper();
 		try {
 			logger.info("Load {}", filename);
+			//Integer d = JsonPath.read(content, "$.assignment.key_exchange.alice.da");
+			//logger.info("d = {}", d == null ? "?" : d);
 			student = mapper.readValue(content, Student.class);
 			student.setFile(filename);
 		} catch (JsonParseException | JsonMappingException e) {
@@ -56,7 +59,7 @@ public class UploadService {
 			student = parseFilename(filename);
 			error = e.getMessage();
 			logger.trace("{} / {}", filename, e.getMessage());
-		} catch (IOException e) {
+		} catch (IOException e) { 
             logger.error("{} / {}", filename, e);
 		}
 		studentRepository.save(student);

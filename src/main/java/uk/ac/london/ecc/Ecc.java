@@ -13,6 +13,7 @@ public class Ecc {
 	private Long b;
 	private Long k;
 	private Long order;
+	private Point g;
 
 	public Ecc() {
 		super();
@@ -100,6 +101,14 @@ public class Ecc {
 		this.order = order;
 	}
 	
+	public Point getG() {
+		return g;
+	}
+
+	public void setG(Point g) {
+		this.g = g;
+	}
+        			
 	@JsonIgnore
 	public Set<Point> getPoints() {
 		Set<Point> points = new HashSet<>();
@@ -209,7 +218,5 @@ public class Ecc {
     	BigInteger biK = new BigInteger(k.toString());
     	return biN.modInverse(biK).intValue();    	
     }
-    
-    
-	
+
 }

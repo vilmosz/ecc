@@ -7,13 +7,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Exercise {
 	
 	public enum Type { 
-		MODK_ADD("modk-add"), MODK_MUL("modk-mul");
+		MODK_ADD("modk-add"), MODK_MUL("modk-mul"), KEY_EXCHANGE("key_exchange");
 		private String value;
 	
 		Type(String value) {
 			this.value = value;
 		}
 		
+		@Override
 		public String toString() {
 			return value;
 		}				
