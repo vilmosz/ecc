@@ -7,14 +7,14 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import uk.ac.london.assignment.model.Assessment;
+import uk.ac.london.assignment.model.Cw1;
 
 @RepositoryRestResource
-public interface AssessmentRepository extends MongoRepository<Assessment, String> {
+public interface Cw1Repository extends MongoRepository<Cw1, String> {
 
-    public List<Assessment> findByName(@Param("s") String s);
+    public List<Cw1> findByName(@Param("s") String s);
 
     @Query(value="{'ecc.a': ?0, '$and' : [{'ecc.b' : ?1}]}")
-    public List<Assessment> findByCurve(@Param("a") Long a, @Param("b") Long b);
+    public List<Cw1> findByCurve(@Param("a") Long a, @Param("b") Long b);
 
 }
