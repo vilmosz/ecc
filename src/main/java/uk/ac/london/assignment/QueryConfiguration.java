@@ -5,7 +5,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 @ConfigurationProperties(prefix = "uolia.cw")
 public class QueryConfiguration {
 	
@@ -15,7 +17,7 @@ public class QueryConfiguration {
 	private String test;
 	
 	public QueryConfiguration() {
-		LOG.info("Loding query properties... {}", test);
+		LOG.info("Loding query properties...");
 	}
 		
 	public Map<String, Map<String, String>> getQueries() {

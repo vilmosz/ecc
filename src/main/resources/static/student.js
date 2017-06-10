@@ -27,7 +27,7 @@ $(document).ready(function() {
 			continue;
 		}
 
-		var url = "api/students/" + value;
+		var url = "api/assessments/" + value;
 		var id = value;
 
 		$.ajax({
@@ -43,23 +43,19 @@ $(document).ready(function() {
 				});
 
 				// Update query string
-				if (typeof student !== 'undefined' && typeof student.ecc != 'undefined') {
-					if (!hash.includes("a=" + student.ecc.a)) {
-						hash += "&a=" + student.ecc.a;
+				if (typeof student !== 'undefined' && typeof student.input != 'undefined') {
+					if (!hash.includes("a=" + student.input.csv.a)) {
+						hash += "&a=" + student.input.csv.a;
 					}
-					if (!hash.includes("b=" + student.ecc.b)) {
-						hash += "&b=" + student.ecc.b;
+					if (!hash.includes("b=" + student.input.csv.b)) {
+						hash += "&b=" + student.input.csv.b;
 					}
-					if (!hash.includes("p=" + student.ecc.k)) {
-						hash += "&p=" + student.ecc.k;
+					if (!hash.includes("p=" + student.input.csv.k)) {
+						hash += "&p=" + student.input.csv.k;
 					}
-					if (typeof student.assignment != 'undefined' 
-						&& typeof student.assignment['modk-mul'] != 'undefined' 
-						&& typeof student.assignment['modk-mul'].n != 'undefined') {
-						if (!hash.includes("n=" + student.assignment['modk-mul'].n)) {
-							hash += "&n=" + student.assignment['modk-mul'].n;
-						}
-					} 
+					if (!hash.includes("n=" + student.input.csv.n)) {
+						hash += "&n=" + student.input.csv.n;
+					}
 					if (hash[0] === "&") {
 						hash = hash.substr(1);
 					}

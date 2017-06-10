@@ -50,9 +50,23 @@
 			<tr th:each="assessment : ${assessments}">
 				<td th:text="${assessment.id}" />
 				<td th:text="${assessment.name}" />
-				<div th:each="entry: ${assessment.input?.csv}">
-					<td th:text="${entry.value}" />
-				</div>
+				<td th:text="${assessment.input?.csv?.a}" />
+				<td th:text="${assessment.input?.csv?.b}" />
+				<td th:text="${assessment.input?.csv?.k}" />
+				<td th:text="${assessment.input?.csv?.order}" />
+				<td th:text="${assessment.input?.csv?.px}" />
+				<td th:text="${assessment.input?.csv?.py}" />
+				<td th:text="${assessment.input?.csv?.qx}" />
+				<td th:text="${assessment.input?.csv?.qy}" />
+				<td th:text="${assessment.input?.csv?.rx}" />
+				<td th:text="${assessment.input?.csv?.ry}" />
+				<td th:text="${assessment.input?.csv?.n}" />
+				<td th:text="${assessment.input?.csv?.sx}" />
+				<td th:text="${assessment.input?.csv?.sy}" />
+				<td><a th:href="@{modk-add.html(id=${assessment.id})}">modk-add</a></td>
+				<td><a th:href="@{modk-mul.html(id=${assessment.id})}">modk-mul</a></td>
+				<td><a th:href="@{reals-add.html(id=${assessment.id})}">real-add</a></td>
+				<td><a th:href="@{reals-mul.html(id=${assessment.id})}">real-mul</a></td>												
 			</tr>
 		</tbody>
 	</table>

@@ -63,11 +63,12 @@ public class UploadService {
 					.stream()
 					.forEach(e -> {
 						logger.info("{}.{} = {}", prefix, e.getKey(), parseInt(content, e.getValue()));
-						assessment.addInput(prefix, e.getKey(), parseInt(content, e.getValue()));
+						assessment.setInput(prefix, e.getKey(), parseInt(content, e.getValue()));
 					});
-				// TODO eventPublisher.publishEvent(new AssessmentEvent(assessment, prefix, error));
+				eventPublisher.publishEvent(new AssessmentEvent(assessment, prefix, error));
 				return assessmentRepository.save(assessment);
 			} catch (InvalidJsonException je) {
+				logger.trace("{}", je);
 				mapper.readValue(content, Object.class);
 				throw new RuntimeException("Should never get here: " + filename);
 			}
@@ -137,24 +138,24 @@ public class UploadService {
 			assessment.setId(csv.getStudentCode());
 		}
 		assessment.setName(csv.getName().trim().replaceAll("\\s+", " "));
-		assessment.addInput(prefix, "a", csv.getA());
-		assessment.addInput(prefix, "b", csv.getB());
-		assessment.addInput(prefix, "k", csv.getK());
-		assessment.addInput(prefix, "order", csv.getOrder());
-		assessment.addInput(prefix, "px", csv.getPx());
-		assessment.addInput(prefix, "py", csv.getPy());
-		assessment.addInput(prefix, "qx", csv.getQx());
-		assessment.addInput(prefix, "qy", csv.getQy());
-		assessment.addInput(prefix, "rx", csv.getRx());
-		assessment.addInput(prefix, "ry", csv.getRy());
-		assessment.addInput(prefix, "n", 3);
+		assessment.setInput(prefix, "a", csv.getA());
+		assessment.setInput(prefix, "b", csv.getB());
+		assessment.setInput(prefix, "k", csv.getK());
+		assessment.setInput(prefix, "order", csv.getOrder());
+		assessment.setInput(prefix, "px", csv.getPx());
+		assessment.setInput(prefix, "py", csv.getPy());
+		assessment.setInput(prefix, "qx", csv.getQx());
+		assessment.setInput(prefix, "qy", csv.getQy());
+		assessment.setInput(prefix, "rx", csv.getRx());
+		assessment.setInput(prefix, "ry", csv.getRy());
+		assessment.setInput(prefix, "n", 3);
 		// solve the multiplication
 		Point p = new Point(csv.getPx(), csv.getPy());
 		Ecc ecc = new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue(),
 				csv.getOrder().longValue());
 		Point s = Ecc.multiplyPoint(p, 3, ecc);
-		assessment.addInput(prefix, "sx", s.x);
-		assessment.addInput(prefix, "sy", s.y);
+		assessment.setInput(prefix, "sx", s.x);
+		assessment.setInput(prefix, "sy", s.y);
 		return assessmentRepository.save(assessment);
 	}
 

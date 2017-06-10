@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-@EnableConfigurationProperties(QueryConfiguration.class)
+@EnableConfigurationProperties
 public class Application extends SpringBootServletInitializer {
 
 	@Override

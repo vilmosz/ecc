@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import uk.ac.london.assignment.repository.StudentRepository;
+import uk.ac.london.assignment.repository.AssessmentRepository;
 
 @Component
 public class DummyDataLoader implements CommandLineRunner {
 
-	private final StudentRepository repository;
+	private final AssessmentRepository repository;
 
 	@Autowired
-	public DummyDataLoader(StudentRepository repository) {
+	public DummyDataLoader(AssessmentRepository repository) {
 		this.repository = repository;
 	}
 
@@ -20,4 +20,5 @@ public class DummyDataLoader implements CommandLineRunner {
 	public void run(String... strings) throws Exception {
 		repository.deleteAll();
 	}
+	
 }
