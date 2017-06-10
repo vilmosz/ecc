@@ -32,6 +32,16 @@ uolia:
         a: "$.ecc.a"
         b: "$.ecc.b"
         k: "$.ecc.k"
+        gx: "$.ecc.g.x"
+        gy: "$.ecc.g.y"
         order: "$.ecc.order"
+        da: "$.assignment.key_exchange.alice.da"
+        qax: "$.assignment.key_exchange.alice.qa.x"
+        qay: "$.assignment.key_exchange.alice.qa.y"
+        db: "$.assignment.key_exchange.bob.db"
+        qbx: "$.assignment.key_exchange.bob.qb.x"
+        qby: "$.assignment.key_exchange.bob.qb.y"
+        keyx: "$.assignment.key_exchange.key.x"
+        keyy: "$.assignment.key_exchange.key.y"
   
          
