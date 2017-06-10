@@ -19,38 +19,19 @@
 			<tr>
 				<th rowspan="2">Student code</th>
 				<th rowspan="2">Name</th>
-				<th colspan="4" rowspan="1">Curve/field parameters</th>
-				<th colspan="2" rowspan="1">P</th>
-				<th colspan="2" rowspan="1">Q</th>
-				<th colspan="2" rowspan="1">R</th>
-				<th rowspan="2">n</th>
-				<th colspan="2" rowspan="1">S</th>
-				<th colspan="4" rowspan="1">Solution</th>
+				<th rowspan="1" th:attr="colspan=${@assessmentService.getHeaders().size()}">Results</th>
 			</tr>
 			<tr>
-				<th>a</th>
-				<th>b</th>
-				<th>k</th>
-				<th>order</th>
-				<th>X</th>
-				<th>Y</th>
-				<th>X</th>
-				<th>Y</th>
-				<th>X</th>
-				<th>Y</th>
-				<th>X</th>
-				<th>Y</th>
-				<th>modk-add</th>
-				<th>modk-mul</th>
-				<th>real-add</th>
-				<th>real-mul</th>
+				<div th:each="entry: ${@assessmentService.getHeaders()}">
+					<th th:text="${entry}" />
+				</div>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="assessment : ${assessments}">
 				<td th:text="${assessment.id}" />
 				<td th:text="${assessment.name}" />
-				<div th:each="entry: ${assessment.input?.csv}">
+				<div th:each="entry: ${assessment.results}">
 					<td th:text="${entry.value}" />
 				</div>
 			</tr>

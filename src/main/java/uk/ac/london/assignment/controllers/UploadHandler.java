@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import uk.ac.london.assignment.model.Student;
+import uk.ac.london.assignment.model.Assessment;
 
 @FunctionalInterface
 public interface UploadHandler {
 
-	List<Student> handleUpload(MultipartFile file) throws IOException;
+	List<Assessment> handleUpload(MultipartFile file, String prefix) throws IOException;
 
 }

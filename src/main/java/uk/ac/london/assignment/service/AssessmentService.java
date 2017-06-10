@@ -14,12 +14,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Objects;
 
 import uk.ac.london.assignment.model.Assessment;
-import uk.ac.london.assignment.model.Cw1;
-import uk.ac.london.assignment.model.Exercise;
-import uk.ac.london.assignment.model.Exercise.Type;
-import uk.ac.london.assignment.model.Student;
-import uk.ac.london.assignment.repository.Cw1Repository;
-import uk.ac.london.assignment.repository.Cw2Repository;
+import uk.ac.london.assignment.repository.AssessmentRepository;
 
 @Service
 public class AssessmentService {
@@ -27,76 +22,51 @@ public class AssessmentService {
     private static final Logger LOG = LoggerFactory.getLogger(AssessmentService.class);
     private static final String COMMENT = "{0} [expected={1},actual={2}]";
 
-    private final Cw1Repository cw1Repository;
-    private final Cw2Repository cw2Repository;
+    private final AssessmentRepository assessmentRepository;
 
     @Autowired
-    public AssessmentService(
-            Cw1Repository cw1Repository,
-            Cw2Repository cw2Repository) {
-        this.cw1Repository = cw1Repository;
-        this.cw2Repository = cw2Repository;
+    public AssessmentService(AssessmentRepository assessmentRepository) {
+        this.assessmentRepository = assessmentRepository;
     }
 
     public void assess(final Assessment assessment) {
-        assessment.resetResults();
-        if (assessment.hasError())
+    	final String prefix = "cw1";
+        assessment.resetResult(prefix);
+        if (assessment.hasError(prefix))
             return;
-        match(assessment, o -> assessment.getExpected().getEcc().getA(), o -> assessment.getActual().getEcc().getA(), Assessment.A_KEY);
-        match(assessment, o -> assessment.getExpected().getEcc().getB(), o -> assessment.getActual().getEcc().getB(), Assessment.B_KEY);
-        match(assessment, o -> assessment.getExpected().getEcc().getK(), o -> assessment.getActual().getEcc().getK(), Assessment.K_KEY);
-        match(assessment, o -> assessment.getExpected().getEcc().getOrder(), o -> assessment.getActual().getEcc().getOrder(), Assessment.ORDER_KEY);
-        match(assessment, o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_ADD.toString())).getR(), o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_ADD.toString())).getR(), Assessment.R_KEY);
-        match(assessment, o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_MUL.toString())).getR(), o -> ((Exercise)assessment.getExpected().getAssignment().get(Type.MODK_MUL.toString())).getR(), Assessment.S_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "a"), o -> assessment.getInput("cw1", "a"), Assessment.A_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "b"), o -> assessment.getInput("cw1", "b"), Assessment.B_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "k"), o -> assessment.getInput("cw1", "k"), Assessment.K_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "order"), o -> assessment.getInput("cw1", "order"), Assessment.ORDER_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "rx"), o -> assessment.getInput("cw1", "rx"), Assessment.R_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "ry"), o -> assessment.getInput("cw1", "ry"), Assessment.R_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "sx"), o -> assessment.getInput("cw1", "sx"), Assessment.S_KEY);
+        match(assessment, prefix, o -> assessment.getInput("csv", "sy"), o -> assessment.getInput("cw1", "sy"), Assessment.S_KEY);
+        assessmentRepository.save(assessment);
     }
 
     public List<String> getHeaders() {
         return Assessment.getHeaders().stream().map(k -> k.replaceAll("^[0-9]*", "")).collect(Collectors.toList());
     }
 
-    private void match(final Assessment assessment, Function<Assessment, Object> expected, Function<Assessment, Object> actual, String key) {
+    private void match(final Assessment assessment, final String prefix, Function<Assessment, Object> expected, Function<Assessment, Object> actual, String key) {
         try {
             boolean match = Objects.equal(expected.apply(assessment), actual.apply(assessment));
-            assessment.addResult(key,  match ? 1 : 0);
-            assessment.addComment(match ? null : MessageFormat.format(COMMENT, key, expected.apply(assessment), actual.apply(assessment)));
+            assessment.addResult(prefix,key,  match ? 1 : 0);
+            assessment.addComment(prefix, match ? null : MessageFormat.format(COMMENT, key, expected.apply(assessment), actual.apply(assessment)));
         } catch (NullPointerException e) {
             LOG.trace("{}", e);
-            assessment.addResult(key, 0);
-            assessment.addComment(MessageFormat.format(COMMENT, key, expected.apply(assessment), null));
+            assessment.addResult(prefix, key, 0);
+            assessment.addComment(prefix, MessageFormat.format(COMMENT, key, expected.apply(assessment), null));
         }
     }
 
     @EventListener
-    void handleStudentEvent(StudentEvent event) {
-        final Student student = (Student) event.getSource();
-        switch (event.getType()) {
-        case ACTUAL:
-            LOG.info("Actual submission: {}", student);
-            // update assessment
-            if (cw1Repository.exists(student.getId())) {
-                Cw1 assessment = cw1Repository.findOne(student.getId());
-                assessment.setActual(student);
-                assessment.setError(event.getError());
-                assess(assessment);
-                cw1Repository.save(assessment);
-            } else {
-                LOG.warn("{} is unrecognized", student);
-            }
-            break;
-        case EXPECTED:
-            LOG.info("Expected submission: {}", student);
-            // create assessment
-            Cw1 assessment = new Cw1();
-            assessment.setExpected(student);
-            assessment.setId(student.getId());
-            assessment.setName(student.getName());
-            assessment.resetResults();
-            assessment.addComment("No submission");
-            cw1Repository.save(assessment);
-            break;
-        default:
-            break;
-        }
+    void handleStudentEvent(AssessmentEvent event) {
+        Assessment assessment = (Assessment) event.getSource();
+        LOG.debug("[{}] : {}", event.getPrefix(), assessment.getId());
+        if (event.getError() != null)
+        	LOG.debug("Error [{}]: {}", event.getPrefix(), event.getError());
     }
 
 }

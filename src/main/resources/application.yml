@@ -10,4 +10,28 @@ server:
   
 logging:
   level:
-    org.springframework: "off"   
+    org.springframework: "off"
+    
+uolia:
+  cw:
+    test: "bla"
+    queries:
+      cw1:
+        a: "$.ecc.a"
+        b: "$.ecc.b"
+        k: "$.ecc.k"
+        order: "$.ecc.order"
+        px: "$.assignment.modk-add.p.x"
+        py: "$.assignment.modk-add.p.y"
+        qx: "$.assignment.modk-add.q.x"
+        qy: "$.assignment.modk-add.q.y"
+        rx: "$.assignment.modk-add.r.x"
+        ry: "$.assignment.modk-add.r.y"
+        sx: "$.assignment.modk-mul.s.x"
+        sy: "$.assignment.modk-mul.s.y"
+      cw2:
+        a: "$.ecc.a"
+        b: "$.ecc.b"
+        k: "$.ecc.k"
+        order: "$.ecc.order"
+         

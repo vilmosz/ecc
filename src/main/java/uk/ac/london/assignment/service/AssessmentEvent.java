@@ -2,31 +2,29 @@ package uk.ac.london.assignment.service;
 
 import org.springframework.context.ApplicationEvent;
 
-public class StudentEvent extends ApplicationEvent {
+public class AssessmentEvent extends ApplicationEvent {
 
 	private static final long serialVersionUID = -6136414682581383052L;
 	
-	public enum Type { ACTUAL, EXPECTED }
-
-	private Type type;
+	private String prefix;
 	private String error;
 	
-	public StudentEvent(Object source) {
+	public AssessmentEvent(Object source) {
 		super(source);
 	}
 	
-	public StudentEvent(Object source, String error, Type type) {
+	public AssessmentEvent(Object source, String prefix, String error) {
 		super(source);
-		this.type = type;
+		this.prefix = prefix;
 		this.error = error;
 	}
 
-	public Type getType() {
-		return type;
+	public String getPrefix() {
+		return prefix;
 	}
 
-	public void setType(Type type) {
-		this.type = type;
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 
 	public String getError() {

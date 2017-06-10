@@ -20,142 +20,142 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.jayway.jsonpath.InvalidJsonException;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
-import com.jayway.jsonpath.InvalidJsonException;
 
-import uk.ac.london.assignment.model.Exercise;
-import uk.ac.london.assignment.model.Exercise.Type;
-import uk.ac.london.assignment.model.Student;
-import uk.ac.london.assignment.repository.StudentRepository;
+import uk.ac.london.assignment.QueryConfiguration;
+import uk.ac.london.assignment.model.Assessment;
+import uk.ac.london.assignment.repository.AssessmentRepository;
 import uk.ac.london.ecc.Ecc;
 
 @Service
 public class UploadService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
+	private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
 
-    private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_CO.*");
+	private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_CO.*");
 
-    private final StudentRepository studentRepository;
-    private final ApplicationEventPublisher eventPublisher;
+	private final AssessmentRepository assessmentRepository;
+	private final ApplicationEventPublisher eventPublisher;
 
-    @Autowired
-    public UploadService(StudentRepository studentRepository, ApplicationEventPublisher eventPublisher) {
-        this.studentRepository = studentRepository;
-        this.eventPublisher = eventPublisher;
-    }
+	@Autowired
+	private QueryConfiguration queryConfiguration;
 
-    public Student loadJson(final String content, final String filename) {
-        Student student = null;
-        String error = null;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            logger.info("Load {}", filename);
-            try {
-                if (JsonPath.read(content, "$.assignment[?(@.key_exchange)]") != null) {
-                    logger.info("CW2!!");
-                    student = new Student();
-                    student.setSrn(parseString(content, "$.srn"));
-                    student.setName(JsonPath.read(content, "$.name"));
-                    Ecc ecc = new Ecc(
-                            parseInt(content, "$.ecc.a").longValue(),
-                            parseInt(content, "$.ecc.b").longValue(),
-                            parseInt(content, "$.ecc.k").longValue(),
-                            parseInt(content, "$.ecc.order").longValue());
-                    ecc.setG(new Point(parseInt(content, "$.ecc.g.x"), parseInt(content, "$.ecc.g.y")));
-                    student.setEcc(ecc);
-                    Integer d = parseInt(content, "$.assignment.key_exchange.alice.da");
-                    logger.info("d = {}", d == null ? "?" : d);
-                } else {
-                    student = mapper.readValue(content, Student.class);
-                }
-                student.setFile(filename);
-            } catch (InvalidJsonException | PathNotFoundException je) {
-                mapper.readValue(content, Object.class);
-            }
-        } catch (JsonParseException | JsonMappingException e) {
-            logger.info("{}", e);
-            student = parseFilename(filename);
-            error = e.getMessage();
-            logger.trace("{} / {}", filename, e.getMessage());
-        } catch (IOException e) {
-            logger.error("{} / {}", filename, e);
-        }
-        studentRepository.save(student);
-        eventPublisher.publishEvent(new StudentEvent(student, error, StudentEvent.Type.ACTUAL));
-        return student;
-    }
+	@Autowired
+	public UploadService(AssessmentRepository assessmentRepository, ApplicationEventPublisher eventPublisher) {
+		this.assessmentRepository = assessmentRepository;
+		this.eventPublisher = eventPublisher;
+	}
 
-    private Student parseCw1(String content) {
-        return null;
-    }
+	public Assessment loadJson(final String content, final String filename, final String prefix) throws IOException {
+		String error = null;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			logger.info("Load {} / {}", prefix, filename);
+			try {
+				final String id = parseString(content, "$.srn");
+				final Assessment assessment = load(id);
+				assessment.setName(JsonPath.read(content, "$.name"));
+				queryConfiguration.getQueries()
+					.get(prefix)
+					.entrySet()
+					.stream()
+					.forEach(e -> {
+						logger.info("{}.{} = {}", prefix, e.getKey(), parseInt(content, e.getValue()));
+						assessment.addInput(prefix, e.getKey(), parseInt(content, e.getValue()));
+					});
+				// TODO eventPublisher.publishEvent(new AssessmentEvent(assessment, prefix, error));
+				return assessmentRepository.save(assessment);
+			} catch (InvalidJsonException je) {
+				mapper.readValue(content, Object.class);
+				throw new RuntimeException("Should never get here: " + filename);
+			}
+		} catch (JsonParseException | JsonMappingException | PathNotFoundException e) {
+			Assessment assessment = parseFilename(filename, prefix);
+			assessment.setError(prefix, e.getMessage());
+			logger.info("{} / {}", filename, error);
+			return assessmentRepository.save(assessment);
+		}
+	}
 
-    private Integer parseInt(final String content, final String jsonPath) {
-        try {
-            return JsonPath.read(content, jsonPath);
-        } catch (ClassCastException e) {
-            logger.trace("{}", e);
-            return Integer.valueOf(JsonPath.read(content, jsonPath));
-        }
-    }
+	private Assessment load(final String id) {
+		Assessment assessment = assessmentRepository.findOne(id);
+		if (assessment != null)
+			return assessment;
+		throw new IllegalArgumentException(String.format("Unrecognized SRN: [%s]", id));
+	}
 
-    private String parseString(final String content, final String jsonPath) {
-        try {
-            return JsonPath.read(content, jsonPath);
-        } catch (ClassCastException e) {
-            logger.trace("{}", e);
-            return parseInt(content, jsonPath).toString();
-        }
-    }
+	private final Integer parseInt(final String content, final String jsonPath) {
+		try {
+			return JsonPath.read(content, jsonPath);
+		} catch (ClassCastException e) {
+			logger.trace("{}", e);
+			return Integer.valueOf(JsonPath.read(content, jsonPath));
+		}
+	}
 
-    private Student parseFilename(final String filename) {
-        logger.info("Parse filename [{}]", filename);
-        Student student = new Student();
-        student.setFile(filename);
-        Matcher m = pattern.matcher(filename);
-        if (m.find()) {
-            student.setName(m.group(1));
-            student.setSrn(m.group(3));
-        }
-        return student;
-    }
+	private String parseString(final String content, final String jsonPath) {
+		try {
+			return JsonPath.read(content, jsonPath);
+		} catch (ClassCastException e) {
+			logger.trace("{}", e);
+			return parseInt(content, jsonPath).toString();
+		}
+	}
 
-    public List<Student> loadCsv(final InputStream inputStream) throws IOException {
-        CsvSchema schema = CsvSchema.emptySchema().withHeader();
-        CsvMapper mapper = new CsvMapper();
-        MappingIterator<uk.ac.london.assignment.model.csv.Student> reader = mapper
-                .readerFor(uk.ac.london.assignment.model.csv.Student.class).with(schema).readValues(inputStream);
-        List<Student> students = new ArrayList<>();
-        while (reader.hasNextValue()) {
-            uk.ac.london.assignment.model.csv.Student csv = reader.nextValue();
-            logger.debug("{}", csv);
-            Student student = createStudent(csv);
-            Exercise exercise = student.getAssignment().get(Exercise.Type.MODK_MUL.toString());
-            exercise.setS(Ecc.multiplyPoint(exercise.getP(), exercise.getN(), student.getEcc()));
-            students.add(student);
-            eventPublisher.publishEvent(new StudentEvent(student, null, StudentEvent.Type.EXPECTED));
-        }
-        return students;
-    }
+	private Assessment parseFilename(final String filename, final String prefix) {
+		logger.info("Parse filename [{}]", filename);
+		Matcher m = pattern.matcher(filename);
+		if (m.find()) {
+			String id = m.group(3);
+			return load(id);
+		}
+		throw new IllegalArgumentException(String.format("Unexpected filname format: [%s]", filename));
+	}
 
-    private Student createStudent(uk.ac.london.assignment.model.csv.Student csv) {
-        Student student = new Student();
-        student.setId(csv.getStudentCode());
-        student.setName(csv.getName().trim().replaceAll("\\s+", " "));
-        student.setEcc(new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue(), csv.getOrder().longValue()));
-        Exercise ex1 = new Exercise();
-        ex1.setP(new Point(csv.getPx(), csv.getPy()));
-        ex1.setQ(new Point(csv.getQx(), csv.getQy()));
-        ex1.setR(new Point(csv.getRx(), csv.getRy()));
-        ex1.setType(Type.MODK_ADD);
-        student.addAssignment(ex1);
-        Exercise ex2 = new Exercise();
-        ex2.setP(new Point(csv.getPx(), csv.getPy()));
-        ex2.setN(3);
-        ex2.setType(Type.MODK_MUL);
-        student.addAssignment(ex2);
-        return student;
-    }
+	public List<Assessment> loadCsv(final InputStream inputStream, final String prefix) throws IOException {
+		CsvSchema schema = CsvSchema.emptySchema().withHeader();
+		CsvMapper mapper = new CsvMapper();
+		MappingIterator<uk.ac.london.assignment.model.csv.Student> reader = mapper
+				.readerFor(uk.ac.london.assignment.model.csv.Student.class).with(schema).readValues(inputStream);
+		List<Assessment> assesssments = new ArrayList<>();
+		while (reader.hasNextValue()) {
+			uk.ac.london.assignment.model.csv.Student csv = reader.nextValue();
+			logger.debug("{}", csv);
+			Assessment assessment = createAssessment(csv, prefix);
+			logger.info("{}: {}", prefix, assessment.getInput());
+			assesssments.add(assessment);
+		}
+		return assesssments;
+	}
+
+	private Assessment createAssessment(uk.ac.london.assignment.model.csv.Student csv, final String prefix) {
+		Assessment assessment = assessmentRepository.findOne(csv.getStudentCode());
+		if (assessment == null) {
+			assessment = new Assessment();
+			assessment.setId(csv.getStudentCode());
+		}
+		assessment.setName(csv.getName().trim().replaceAll("\\s+", " "));
+		assessment.addInput(prefix, "a", csv.getA());
+		assessment.addInput(prefix, "b", csv.getB());
+		assessment.addInput(prefix, "k", csv.getK());
+		assessment.addInput(prefix, "order", csv.getOrder());
+		assessment.addInput(prefix, "px", csv.getPx());
+		assessment.addInput(prefix, "py", csv.getPy());
+		assessment.addInput(prefix, "qx", csv.getQx());
+		assessment.addInput(prefix, "qy", csv.getQy());
+		assessment.addInput(prefix, "rx", csv.getRx());
+		assessment.addInput(prefix, "ry", csv.getRy());
+		assessment.addInput(prefix, "n", 3);
+		// solve the multiplication
+		Point p = new Point(csv.getPx(), csv.getPy());
+		Ecc ecc = new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue(),
+				csv.getOrder().longValue());
+		Point s = Ecc.multiplyPoint(p, 3, ecc);
+		assessment.addInput(prefix, "sx", s.x);
+		assessment.addInput(prefix, "sy", s.y);
+		return assessmentRepository.save(assessment);
+	}
 
 }

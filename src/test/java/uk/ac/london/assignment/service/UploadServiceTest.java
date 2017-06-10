@@ -12,8 +12,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ClassPathResource;
 
-import uk.ac.london.assignment.model.Student;
-import uk.ac.london.assignment.repository.StudentRepository;
+import uk.ac.london.assignment.model.Assessment;
+import uk.ac.london.assignment.repository.AssessmentRepository;
 
 public class UploadServiceTest {
 
@@ -24,25 +24,25 @@ public class UploadServiceTest {
 
     @Before
     public void setUp() {
-    	final StudentRepository studentRepository = mock(StudentRepository.class);
+    	final AssessmentRepository assessmentRepository = mock(AssessmentRepository.class);
     	final ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
-    	uploadService = new UploadService(studentRepository, eventPublisher);
+    	uploadService = new UploadService(assessmentRepository, eventPublisher);
     }
     
     @Test
     public void loadJsonTest_GoodJson() throws IOException {
     	File file = (new ClassPathResource(GOOD_JSON)).getFile();
     	String content = FileUtils.readFileToString(file, "UTF-8");
-    	Student student = uploadService.loadJson(content, GOOD_JSON);
-        assertNotNull(student);
+    	Assessment assessment = uploadService.loadJson(content, GOOD_JSON, "cw1");
+        assertNotNull(assessment);
     }
 
     @Test
     public void loadJsonTest_BadJson() throws IOException {
     	File file = (new ClassPathResource(BAD_JSON)).getFile();
     	String content = FileUtils.readFileToString(file, "UTF-8");
-    	Student student = uploadService.loadJson(content, BAD_JSON);
-        assertNotNull(student);
+    	Assessment assessment = uploadService.loadJson(content, BAD_JSON, "cw1");
+        assertNotNull(assessment);
     }
     
 }

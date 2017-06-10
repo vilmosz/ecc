@@ -13,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,10 +25,11 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
-import uk.ac.london.assignment.model.Student;
+import uk.ac.london.assignment.model.Assessment;
 import uk.ac.london.assignment.service.UploadService;
 
 @RestController
+@RequestMapping(value = "api/upload")
 public class FileUploadController {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
@@ -37,17 +40,19 @@ public class FileUploadController {
 	@Autowired
 	private UploadService uploadService;
 
-	@PostMapping(value = "/api/upload-students", produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Student> uploadStudents(@RequestParam("file") MultipartFile file) throws IOException {
+	@PostMapping(value = "/{prefix}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Assessment> uploadStudents(
+			@PathVariable("prefix") final String prefix,
+			@RequestParam("file") MultipartFile file) throws IOException {
 		final String mimeType = file.getContentType();
 		logger.info("Storing file [{}] of type [{}]", file.getOriginalFilename(), mimeType);
 		try {
 			if (isCompressed(mimeType)) {
-				return getCompressedFileHandler().handleUpload(file);
+				return getCompressedFileHandler().handleUpload(file, prefix);
 			} else if (isJson(mimeType)) {
-				return getJsonFileHandler().handleUpload(file);
+				return getJsonFileHandler().handleUpload(file, prefix);
 			} else if (isCsv(mimeType)) {
-				return getCsvFileHandler().handleUpload(file);
+				return getCsvFileHandler().handleUpload(file, prefix);
 			} else {
 				throw new IllegalArgumentException(String.format("Unrecognized mime type [%s]", mimeType));
 			}
@@ -55,8 +60,8 @@ public class FileUploadController {
 			logger.error(String.format("Error processing [%s]", file.getOriginalFilename()), e);
 			throw e;
 		}
-	}
-
+	}	
+	
 	private final Boolean isCompressed(final String mimeType) {
 		return compressedMimeTypes.contains(mimeType);
 	}
@@ -70,36 +75,36 @@ public class FileUploadController {
 	}
 
 	private UploadHandler getJsonFileHandler() {
-		return file -> {
+		return (file, prefix) -> {
 			String text = IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8.name());
-			Student student = uploadService.loadJson(text, file.getOriginalFilename());
-			logger.debug("Student: {}", student);
-			return Lists.newArrayList(student);
+			Assessment assessment = uploadService.loadJson(text, file.getOriginalFilename(), prefix);
+			logger.debug("Assessment: {}", assessment);
+			return Lists.newArrayList(assessment);
 		};
 	}
 
 	private UploadHandler getCompressedFileHandler() {
-		return file -> {
-			List<Student> students = new ArrayList<>();
+		return (file, prefix) -> {
+			List<Assessment> assessments = new ArrayList<>();
 			try (final ZipInputStream zis = new ZipInputStream(file.getInputStream())) {
 				ZipEntry entry;
 				while ((entry = zis.getNextEntry()) != null) {
 					final String entryName = entry.getName();
 					String text = IOUtils.toString(zis, StandardCharsets.UTF_8.name());
-					Student student = uploadService.loadJson(text, entryName);
-					logger.debug("Student: {}", student);
-					if (student != null)
-						students.add(student);
+					Assessment assessment = uploadService.loadJson(text, entryName, prefix);
+					logger.debug("Assessment: {}", assessment);
+					if (assessment != null)
+						assessments.add(assessment);
 					zis.closeEntry();
 				}
 			}
-			return students;
+			return assessments;
 		};
 	}
 
 	private UploadHandler getCsvFileHandler() {
-		return file -> {
-			return uploadService.loadCsv(file.getInputStream());
+		return (file, prefix) -> {
+			return uploadService.loadCsv(file.getInputStream(), prefix);
 		};
 	}
 

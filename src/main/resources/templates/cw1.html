@@ -23,8 +23,8 @@
 				<th colspan="2" rowspan="1">P</th>
 				<th colspan="2" rowspan="1">Q</th>
 				<th colspan="2" rowspan="1">R</th>
-				<th rowspan="2">n</th>
 				<th colspan="2" rowspan="1">S</th>
+				<th rowspan="2">Comment</th>
 				<th colspan="4" rowspan="1">Solution</th>
 			</tr>
 			<tr>
@@ -50,9 +50,19 @@
 			<tr th:each="assessment : ${assessments}">
 				<td th:text="${assessment.id}" />
 				<td th:text="${assessment.name}" />
-				<div th:each="entry: ${assessment.input?.csv}">
-					<td th:text="${entry.value}" />
-				</div>
+				<td th:text="${assessment.input['cw1']?.a}" />
+				<td th:text="${assessment.input['cw1']?.b}" />
+				<td th:text="${assessment.input['cw1']?.k}" />
+				<td th:text="${assessment.input['cw1']?.order}" />
+				<td th:text="${assessment.input['cw1']?.px}" />
+				<td th:text="${assessment.input['cw1']?.py}" />
+				<td th:text="${assessment.input['cw1']?.qx}" />
+				<td th:text="${assessment.input['cw1']?.qy}" />
+				<td th:text="${assessment.input['cw1']?.rx}" />
+				<td th:text="${assessment.input['cw1']?.ry}" />
+				<td th:text="${assessment.input['cw1']?.sx}" />
+				<td th:text="${assessment.input['cw1']?.sy}" />
+				<td th:text="${assessment.error?.cw1}" />
 			</tr>
 		</tbody>
 	</table>
