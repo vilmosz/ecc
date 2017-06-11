@@ -57,6 +57,7 @@ public class Cw1Service extends AbstractCwService {
 		Long a = assessment.getInput(REFERENCE, "a").longValue();
 		Long b = assessment.getInput(REFERENCE, "b").longValue();
 		Long k = assessment.getInput(REFERENCE, "k").longValue();
+		Number n = assessment.getInput(REFERENCE, "n");
 
 		Ecc ecc = new Ecc(a, b, k);
 		
@@ -77,7 +78,7 @@ public class Cw1Service extends AbstractCwService {
 		assessment.setInput(REFERENCE, "ry", r.y);
 		
 		// solve the multiplication
-		Point s = Ecc.multiplyPoint(p, 3, ecc);
+		Point s = Ecc.multiplyPoint(p, n, ecc);
 		assessment.setInput(REFERENCE, "sx", s.x);
 		assessment.setInput(REFERENCE, "sy", s.y);
         

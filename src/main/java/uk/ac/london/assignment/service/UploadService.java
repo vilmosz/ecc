@@ -33,6 +33,8 @@ public class UploadService {
 	private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
 
 	private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_(?:CO|cw).*");
+	
+	private static final String NO_SUBMISSION = "No JSON submission";
 
 	private final AssessmentRepository assessmentRepository;
 	private final ApplicationEventPublisher eventPublisher;
@@ -144,7 +146,10 @@ public class UploadService {
 		assessment.setInput(prefix, "py", csv.getPy());
 		assessment.setInput(prefix, "qx", csv.getQx());
 		assessment.setInput(prefix, "qy", csv.getQy());
-		assessment.setInput(prefix, "n", 3);		
+		assessment.setInput(prefix, "n", 3);
+		// set an initial empty submission
+		assessment.setError(Cw1Service.PREFIX, NO_SUBMISSION);
+		assessment.setError(Cw2Service.PREFIX, NO_SUBMISSION);
 		return assessmentRepository.save(assessment);
 	}
 

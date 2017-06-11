@@ -19,23 +19,16 @@
 			<tr>
 				<th rowspan="2">Student code</th>
 				<th rowspan="2">Name</th>
-				<th colspan="4" rowspan="1">Curve/field parameters</th>
+				<th colspan="3" rowspan="1">Curve/field parameters</th>
 				<th colspan="2" rowspan="1">P</th>
 				<th colspan="2" rowspan="1">Q</th>
-				<th colspan="2" rowspan="1">R</th>
 				<th rowspan="2">n</th>
-				<th colspan="2" rowspan="1">S</th>
 				<th colspan="4" rowspan="1">Solution</th>
 			</tr>
 			<tr>
 				<th>a</th>
 				<th>b</th>
 				<th>k</th>
-				<th>order</th>
-				<th>X</th>
-				<th>Y</th>
-				<th>X</th>
-				<th>Y</th>
 				<th>X</th>
 				<th>Y</th>
 				<th>X</th>
@@ -50,23 +43,18 @@
 			<tr th:each="assessment : ${assessments}">
 				<td th:text="${assessment.id}" />
 				<td th:text="${assessment.name}" />
-				<td th:text="${assessment.input?.csv?.a}" />
-				<td th:text="${assessment.input?.csv?.b}" />
-				<td th:text="${assessment.input?.csv?.k}" />
-				<td th:text="${assessment.input?.csv?.order}" />
-				<td th:text="${assessment.input?.csv?.px}" />
-				<td th:text="${assessment.input?.csv?.py}" />
-				<td th:text="${assessment.input?.csv?.qx}" />
-				<td th:text="${assessment.input?.csv?.qy}" />
-				<td th:text="${assessment.input?.csv?.rx}" />
-				<td th:text="${assessment.input?.csv?.ry}" />
-				<td th:text="${assessment.input?.csv?.n}" />
-				<td th:text="${assessment.input?.csv?.sx}" />
-				<td th:text="${assessment.input?.csv?.sy}" />
-				<td><a th:href="@{modk-add.html(id=${assessment.id})}">modk-add</a></td>
-				<td><a th:href="@{modk-mul.html(id=${assessment.id})}">modk-mul</a></td>
-				<td><a th:href="@{reals-add.html(id=${assessment.id})}">real-add</a></td>
-				<td><a th:href="@{reals-mul.html(id=${assessment.id})}">real-mul</a></td>												
+				<td th:text="${assessment.input['csv']?.a}" />
+				<td th:text="${assessment.input['csv']?.b}" />
+				<td th:text="${assessment.input['csv']?.k}" />
+				<td th:text="${assessment.input['csv']?.px}" />
+				<td th:text="${assessment.input['csv']?.py}" />
+				<td th:text="${assessment.input['csv']?.qx}" />
+				<td th:text="${assessment.input['csv']?.qy}" />
+				<td th:text="${assessment.input['csv']?.n}" />
+				<td><a th:href="@{modk-add.html(id=${assessment.id})}" target="_blank">modk-add</a></td>
+				<td><a th:href="@{modk-mul.html(id=${assessment.id})}" target="_blank">modk-mul</a></td>
+				<td><a th:href="@{reals-add.html(id=${assessment.id})}" target="_blank">real-add</a></td>
+				<td><a th:href="@{reals-mul.html(id=${assessment.id})}" target="_blank">real-mul</a></td>												
 			</tr>
 		</tbody>
 	</table>
