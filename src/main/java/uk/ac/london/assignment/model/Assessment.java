@@ -95,6 +95,15 @@ public class Assessment {
 		error.put(prefix,  value);
 	}
 
+	public void resetError(final String prefix) {
+		if (error != null) {
+			if (error.containsKey(prefix))
+				error.remove(prefix);
+			if (error.isEmpty())
+				error = null;
+		}
+	}
+	
     public void appendError(final String prefix, String message) {
         if (message == null || message.isEmpty())
             return;

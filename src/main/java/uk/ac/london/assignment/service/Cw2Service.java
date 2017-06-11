@@ -1,5 +1,6 @@
 package uk.ac.london.assignment.service;
 
+import java.awt.Point;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import com.google.common.base.Objects;
 
 import uk.ac.london.assignment.model.Assessment;
 import uk.ac.london.assignment.repository.AssessmentRepository;
+import uk.ac.london.ecc.Ecc;
 
 @Service
 @ConfigurationProperties(prefix = "uolia.cw.queries")
@@ -30,33 +32,11 @@ public class Cw2Service extends AbstractCwService {
     	super(assessmentRepository);
     }
 
-    /**
-     * 0: "a", 1: "b", 2: "k", 3: "gx", 4: "gy", 5: "order", 6: "da", 
-     * 7: "qax", 8: "qay", 9: "db", 10: "qbx", 11: "qby", 12: "keyx", 13: "keyy"
-     * 
-     * @param assessment
-     */
-    public void assess(final Assessment assessment) {
-    	assessment.setError(PREFIX, null);
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "a"), o -> assessment.getInput(PREFIX, "a"), getHeader(0));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "b"), o -> assessment.getInput(PREFIX, "b"), getHeader(1));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "k"), o -> assessment.getInput(PREFIX, "k"), getHeader(2));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "order"), o -> assessment.getInput(PREFIX, "order"), getHeader(5));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "px"), o -> assessment.getInput(PREFIX, "gx"), getHeader(3));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "py"), o -> assessment.getInput(PREFIX, "gy"), getHeader(4));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "qx"), o -> assessment.getInput("cw1", "qx"), getHeader(6));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "qy"), o -> assessment.getInput("cw1", "qy"), getHeader(7));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "rx"), o -> assessment.getInput("cw1", "rx"), getHeader(8));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "ry"), o -> assessment.getInput("cw1", "ry"), getHeader(9));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "sx"), o -> assessment.getInput("cw1", "sx"), getHeader(10));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "sy"), o -> assessment.getInput("cw1", "sy"), getHeader(11));
-        assessmentRepository.save(assessment);
-    }
-
-    public String getHeader(final int i) {
+    @Override
+    public List<String> getHeader() {
     	if (header == null)
     		header = cw2.keySet().stream().collect(Collectors.toList()); 
-        return header.get(i);
+        return header;
     }
 
     public Map<String, String> getCw2() {
@@ -73,7 +53,48 @@ public class Cw2Service extends AbstractCwService {
     		return;
         Assessment assessment = (Assessment) event.getSource();
         LOG.info("[{}] : {}", event.getPrefix(), assessment.getId());
-    	assess(assessment);
+
+        // get parameters
+		Long a = ((Number) assessment.getInput(REFERENCE, "a")).longValue();
+		Long b = ((Number) assessment.getInput(REFERENCE, "b")).longValue();
+		Long k = ((Number) assessment.getInput(REFERENCE, "k")).longValue();
+		Long order = ((Number) assessment.getInput(REFERENCE, "order")).longValue();
+
+		Integer gx = (Integer) assessment.getInput(REFERENCE, "px");
+		Integer gy = (Integer) assessment.getInput(REFERENCE, "py");
+		assessment.setInput(REFERENCE, "gx", gx);
+		assessment.setInput(REFERENCE, "gy", gy);
+
+		// private keys
+		Integer da = (Integer) assessment.getInput(PREFIX, "da");
+		Integer db = (Integer) assessment.getInput(PREFIX, "db");
+		assessment.setInput(REFERENCE, "da", da);
+		assessment.setInput(REFERENCE, "db", db);
+		
+		Ecc ecc = new Ecc(a, b, k, order);
+		Point g = new Point(gx, gy);
+		
+		// Alice's key
+		Point qa = Ecc.multiplyPoint(g, da, ecc);
+		assessment.setInput(REFERENCE, "qax", qa.x);
+		assessment.setInput(REFERENCE, "qay", qa.y);
+
+		// Bob's key
+		Point qb = Ecc.multiplyPoint(g, db, ecc);
+		assessment.setInput(REFERENCE, "qbx", qb.x);
+		assessment.setInput(REFERENCE, "qby", qb.y);
+		
+		// Shared key
+		Point alice	= Ecc.multiplyPoint(qb, da, ecc);
+		Point bob	= Ecc.multiplyPoint(qa, db, ecc);
+
+		if (!Objects.equal(alice, bob))
+			throw new IllegalArgumentException("Calculations are wrong");
+		
+		assessment.setInput(REFERENCE, "keyx", bob.x);
+		assessment.setInput(REFERENCE, "keyy", bob.y);
+		
+    	assess(assessment, PREFIX);
     }
 
 }

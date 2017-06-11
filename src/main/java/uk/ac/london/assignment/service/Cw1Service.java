@@ -1,5 +1,7 @@
 package uk.ac.london.assignment.service;
 
+import java.awt.Point;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -13,6 +15,7 @@ import com.google.common.base.Objects;
 
 import uk.ac.london.assignment.model.Assessment;
 import uk.ac.london.assignment.repository.AssessmentRepository;
+import uk.ac.london.ecc.Ecc;
 
 @Service
 @ConfigurationProperties(prefix = "uolia.cw.queries")
@@ -28,32 +31,11 @@ public class Cw1Service extends AbstractCwService {
     	super(assessmentRepository);
     }
 
-    /**
-     * 0: "a", 1: "b", 2: "k", 3: "order", 4: "px", 5: "py", 6: "qx", 7: "qy", 8: "rx", 9: "ry", 10: "sx", 11: "sy"
-     * 
-     * @param assessment
-     */
-    public void assess(final Assessment assessment) {
-    	assessment.setError(PREFIX, null);
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "a"), o -> assessment.getInput("cw1", "a"), getHeader(0));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "b"), o -> assessment.getInput("cw1", "b"), getHeader(1));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "k"), o -> assessment.getInput("cw1", "k"), getHeader(2));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "order"), o -> assessment.getInput("cw1", "order"), getHeader(3));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "px"), o -> assessment.getInput("cw1", "px"), getHeader(4));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "py"), o -> assessment.getInput("cw1", "py"), getHeader(5));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "qx"), o -> assessment.getInput("cw1", "qx"), getHeader(6));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "qy"), o -> assessment.getInput("cw1", "qy"), getHeader(7));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "rx"), o -> assessment.getInput("cw1", "rx"), getHeader(8));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "ry"), o -> assessment.getInput("cw1", "ry"), getHeader(9));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "sx"), o -> assessment.getInput("cw1", "sx"), getHeader(10));
-        match(assessment, PREFIX, o -> assessment.getInput("csv", "sy"), o -> assessment.getInput("cw1", "sy"), getHeader(11));
-        assessmentRepository.save(assessment);
-    }
-
-    public String getHeader(final int i) {
+    @Override
+    public List<String> getHeader() {
     	if (header == null)
     		header = cw1.keySet().stream().collect(Collectors.toList()); 
-        return header.get(i);
+        return this.header;
     }
 
     public Map<String, String> getCw1() {
@@ -68,9 +50,36 @@ public class Cw1Service extends AbstractCwService {
     void handleStudentEvent(AssessmentEvent event) {
     	if (!Objects.equal(PREFIX, event.getPrefix()))
     		return;
-        Assessment assessment = (Assessment) event.getSource();
+        Assessment assessment = (Assessment) event.getSource();        
         LOG.info("[{}] : {}", event.getPrefix(), assessment.getId());
-    	assess(assessment);
+
+        // get parameters
+		Long a = ((Number) assessment.getInput(REFERENCE, "a")).longValue();
+		Long b = ((Number) assessment.getInput(REFERENCE, "b")).longValue();
+		Long k = ((Number) assessment.getInput(REFERENCE, "k")).longValue();
+		Long order = ((Number) assessment.getInput(REFERENCE, "order")).longValue();
+		Number n = (Number) assessment.getInput(REFERENCE, "n");
+
+		Integer px = (Integer) assessment.getInput(REFERENCE, "px");
+		Integer py = (Integer) assessment.getInput(REFERENCE, "py");
+		Integer qx = (Integer) assessment.getInput(REFERENCE, "qx");
+		Integer qy = (Integer) assessment.getInput(REFERENCE, "qy");
+		
+		Ecc ecc = new Ecc(a, b, k, order);
+		Point p = new Point(px, py);
+		Point q = new Point(qx, qy);
+
+		// solve the addition
+		Point r = Ecc.addPoint(p, q, ecc);
+		assessment.setInput(REFERENCE, "rx", r.x);
+		assessment.setInput(REFERENCE, "ry", r.y);
+		
+		// solve the multiplication
+		Point s = Ecc.multiplyPoint(p, n, ecc);
+		assessment.setInput(REFERENCE, "sx", s.x);
+		assessment.setInput(REFERENCE, "sy", s.y);
+        
+    	assess(assessment, PREFIX);
     }
 
 }

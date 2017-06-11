@@ -1,6 +1,5 @@
 package uk.ac.london.assignment.service;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import com.jayway.jsonpath.PathNotFoundException;
 import uk.ac.london.assignment.QueryConfiguration;
 import uk.ac.london.assignment.model.Assessment;
 import uk.ac.london.assignment.repository.AssessmentRepository;
-import uk.ac.london.ecc.Ecc;
 
 @Service
 public class UploadService {
@@ -146,16 +144,7 @@ public class UploadService {
 		assessment.setInput(prefix, "py", csv.getPy());
 		assessment.setInput(prefix, "qx", csv.getQx());
 		assessment.setInput(prefix, "qy", csv.getQy());
-		assessment.setInput(prefix, "rx", csv.getRx());
-		assessment.setInput(prefix, "ry", csv.getRy());
-		assessment.setInput(prefix, "n", 3);
-		// solve the multiplication
-		Point p = new Point(csv.getPx(), csv.getPy());
-		Ecc ecc = new Ecc(csv.getA().longValue(), csv.getB().longValue(), csv.getK().longValue(),
-				csv.getOrder().longValue());
-		Point s = Ecc.multiplyPoint(p, 3, ecc);
-		assessment.setInput(prefix, "sx", s.x);
-		assessment.setInput(prefix, "sy", s.y);
+		assessment.setInput(prefix, "n", 3);		
 		return assessmentRepository.save(assessment);
 	}
 

@@ -62,7 +62,7 @@
 				<td th:text="${assessment.result['cw1']?.ry}" />
 				<td th:text="${assessment.result['cw1']?.sx}" />
 				<td th:text="${assessment.result['cw1']?.sy}" />
-				<td th:text="${assessment.error?.cw1}" />
+				<td th:text="${assessment.error?.cw1?}" />
 				<td><a th:href="@{modk-add.html(id=${assessment.id})}">modk-add</a></td>
 				<td><a th:href="@{modk-mul.html(id=${assessment.id})}">modk-mul</a></td>
 				<td><a th:href="@{reals-add.html(id=${assessment.id})}">real-add</a></td>

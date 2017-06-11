@@ -16,12 +16,23 @@ public abstract class AbstractCwService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCwService.class);
     public static final String COMMENT = "{0} [expected={1},actual={2}]";
+    public static final String REFERENCE = "csv";
     
     protected final AssessmentRepository assessmentRepository;  
     protected List<String> header;    
 
     public AbstractCwService(AssessmentRepository assessmentRepository) {
         this.assessmentRepository = assessmentRepository;
+    }
+    
+    public abstract List<String> getHeader();
+    
+    public void assess(final Assessment assessment, final String prefix) {
+    	assessment.resetError(prefix);
+    	getHeader().stream().forEach(header -> {
+            match(assessment, prefix, o -> assessment.getInput(REFERENCE, header), o -> assessment.getInput(prefix, header), header);    		
+    	});
+        assessmentRepository.save(assessment);
     }
     
     public void match(final Assessment assessment, final String prefix, Function<Assessment, Object> expected, Function<Assessment, Object> actual, String key) {
