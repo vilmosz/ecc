@@ -46,21 +46,21 @@
 			<tr th:each="assessment : ${assessments}">
 				<td th:text="${assessment.id}" />
 				<td th:text="${assessment.name}" />
-				<td th:text="${assessment.result['cw2']?.a}" />
-				<td th:text="${assessment.result['cw2']?.b}" />
-				<td th:text="${assessment.result['cw2']?.k}" />
-				<td th:text="${assessment.result['cw2']?.order}" />
-				<td th:text="${assessment.result['cw2']?.gx}" />
-				<td th:text="${assessment.result['cw2']?.gy}" />
-				<td th:text="${assessment.result['cw2']?.da}" />
-				<td th:text="${assessment.result['cw2']?.qax}" />
-				<td th:text="${assessment.result['cw2']?.qay}" />
-				<td th:text="${assessment.result['cw2']?.db}" />
-				<td th:text="${assessment.result['cw2']?.qbx}" />
-				<td th:text="${assessment.result['cw2']?.qby}" />
-				<td th:text="${assessment.result['cw2']?.keyx}" />
-				<td th:text="${assessment.result['cw2']?.keyy}" />
-				<td th:text="${assessment.error?.cw2}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.a} : ${assessment.input['cw2']?.a}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.b} : ${assessment.input['cw2']?.b}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.k} : ${assessment.input['cw2']?.k}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.order} : ${assessment.input['cw2']?.order}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.gx} : ${assessment.input['cw2']?.gx}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.gy} : ${assessment.input['cw2']?.gy}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.da} : ${assessment.input['cw2']?.da}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.qax} : ${assessment.input['cw2']?.qax}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.qay} : ${assessment.input['cw2']?.qay}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.db} : ${assessment.input['cw2']?.db}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.qbx} : ${assessment.input['cw2']?.qbx}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.qby} : ${assessment.input['cw2']?.qby}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.keyx} : ${assessment.input['cw2']?.keyx}" />
+				<td th:text="${param.input == null} ? ${assessment.result['cw2']?.keyy} : ${assessment.input['cw2']?.keyy}" />
+				<td th:text="${assessment['error'] != null} ? ${assessment['error'].get('cw2')}" />
 			</tr>
 		</tbody>
 	</table>

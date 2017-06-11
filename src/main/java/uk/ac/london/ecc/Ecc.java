@@ -15,20 +15,15 @@ public class Ecc {
     private Long order;
     private Point g;
 
-    public Ecc() {
-        super();
-    }
-
-    public Ecc(Long a, Long b, Long k, Long order) {
+    public Ecc(Long a, Long b, Long k) {
         super();
         this.a = a;
         this.b = b;
         this.k = k;
-        this.order = order;
     }
 
-    public Ecc(Long a, Long b, Long k, Long order, Point g) {
-        this(a, b, k, order);
+    public Ecc(Long a, Long b, Long k, Point g) {
+        this(a, b, k);
         this.g = g;
     }
 
@@ -99,6 +94,9 @@ public class Ecc {
     }
 
     public Long getOrder() {
+    	if (order == null) {
+    		order = Integer.valueOf(getPoints().size()).longValue();
+    	}
         return order;
     }
 

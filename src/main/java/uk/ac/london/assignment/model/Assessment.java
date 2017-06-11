@@ -130,7 +130,7 @@ public class Assessment {
 		map.put(key, value);
 	}
 
-	public Object getInput(final String prefix, final String key) {
+	public Integer getInput(final String prefix, final String key) {
 		if (input != null && input.containsKey(prefix) && input.get(prefix).containsKey(key))
 			return input.get(prefix).get(key);
 		return null;

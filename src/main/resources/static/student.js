@@ -56,6 +56,18 @@ $(document).ready(function() {
 					if (!hash.includes("n=" + student.input.csv.n)) {
 						hash += "&n=" + student.input.csv.n;
 					}
+					if (!hash.includes("px=" + student.input.csv.px)) {
+						hash += "&px=" + student.input.csv.px;
+					}
+					if (!hash.includes("py=" + student.input.csv.py)) {
+						hash += "&py=" + student.input.csv.py;
+					}
+					if (!hash.includes("qx=" + student.input.csv.qx)) {
+						hash += "&qx=" + student.input.csv.qx;
+					}
+					if (!hash.includes("qy=" + student.input.csv.qy)) {
+						hash += "&qy=" + student.input.csv.qy;
+					}
 					if (hash[0] === "&") {
 						hash = hash.substr(1);
 					}

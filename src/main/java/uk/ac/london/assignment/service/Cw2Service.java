@@ -26,12 +26,19 @@ public class Cw2Service extends AbstractCwService {
     public static final String PREFIX = "cw2";
 
     private Map<String, String> cw2;
-    private List<String> header;
 
     public Cw2Service(AssessmentRepository assessmentRepository) {
     	super(assessmentRepository);
     }
 
+    @Override
+    public void assess(final Assessment assessment, final String prefix) {
+    	super.assess(assessment, prefix);
+    	check(assessment, prefix, o -> assessment.getInput(prefix, "da") > 10 && assessment.getInput(prefix, "da") < assessment.getInput(REFERENCE, "order") , "da");
+    	check(assessment, prefix, o -> assessment.getInput(prefix, "db") > 10 && assessment.getInput(prefix, "db") < assessment.getInput(REFERENCE, "order") , "db");
+        assessmentRepository.save(assessment);
+    }
+    
     @Override
     public List<String> getHeader() {
     	if (header == null)
@@ -55,23 +62,26 @@ public class Cw2Service extends AbstractCwService {
         LOG.info("[{}] : {}", event.getPrefix(), assessment.getId());
 
         // get parameters
-		Long a = ((Number) assessment.getInput(REFERENCE, "a")).longValue();
-		Long b = ((Number) assessment.getInput(REFERENCE, "b")).longValue();
-		Long k = ((Number) assessment.getInput(REFERENCE, "k")).longValue();
-		Long order = ((Number) assessment.getInput(REFERENCE, "order")).longValue();
+		Long a = assessment.getInput(REFERENCE, "a").longValue();
+		Long b = assessment.getInput(REFERENCE, "b").longValue();
+		Long k = assessment.getInput(REFERENCE, "k").longValue();
+		
+		Ecc ecc = new Ecc(a, b, k);
+		
+		// compute order
+		assessment.setInput(REFERENCE, "order", ecc.getOrder().intValue());
 
-		Integer gx = (Integer) assessment.getInput(REFERENCE, "px");
-		Integer gy = (Integer) assessment.getInput(REFERENCE, "py");
+		Integer gx = assessment.getInput(REFERENCE, "px");
+		Integer gy = assessment.getInput(REFERENCE, "py");
 		assessment.setInput(REFERENCE, "gx", gx);
 		assessment.setInput(REFERENCE, "gy", gy);
 
 		// private keys
-		Integer da = (Integer) assessment.getInput(PREFIX, "da");
-		Integer db = (Integer) assessment.getInput(PREFIX, "db");
+		Integer da = assessment.getInput(PREFIX, "da");
+		Integer db = assessment.getInput(PREFIX, "db");
 		assessment.setInput(REFERENCE, "da", da);
 		assessment.setInput(REFERENCE, "db", db);
 		
-		Ecc ecc = new Ecc(a, b, k, order);
 		Point g = new Point(gx, gy);
 		
 		// Alice's key

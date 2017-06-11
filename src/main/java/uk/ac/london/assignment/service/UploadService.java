@@ -50,7 +50,7 @@ public class UploadService {
 		String error = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			logger.info("Load {} / {}", prefix, filename);
+			logger.debug("Load [{}] {}", prefix, filename);
 			try {
 				final String id = parseString(content, "$.srn");
 				final Assessment assessment = load(id);
@@ -60,7 +60,7 @@ public class UploadService {
 					.entrySet()
 					.stream()
 					.forEach(e -> {
-						logger.info("{}.{} = {}", prefix, e.getKey(), parseInt(content, e.getValue()));
+						logger.debug("{}.{} = {}", prefix, e.getKey(), parseInt(content, e.getValue()));
 						assessment.setInput(prefix, e.getKey(), parseInt(content, e.getValue()));
 					});
 				eventPublisher.publishEvent(new AssessmentEvent(assessment, prefix, error));
@@ -73,7 +73,7 @@ public class UploadService {
 		} catch (JsonParseException | JsonMappingException | PathNotFoundException e) {
 			Assessment assessment = parseFilename(filename, prefix);
 			assessment.setError(prefix, e.getMessage());
-			logger.info("{} / {}", filename, error);
+			logger.debug("{} / {}", filename, error);
 			return assessmentRepository.save(assessment);
 		}
 	}
@@ -123,7 +123,7 @@ public class UploadService {
 			uk.ac.london.assignment.model.csv.Student csv = reader.nextValue();
 			logger.debug("{}", csv);
 			Assessment assessment = createAssessment(csv, prefix);
-			logger.info("{}: {}", prefix, assessment.getInput());
+			logger.debug("{}: {}", prefix, assessment.getInput());
 			assesssments.add(assessment);
 		}
 		return assesssments;

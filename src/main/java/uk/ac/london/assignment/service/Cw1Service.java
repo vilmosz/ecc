@@ -54,18 +54,20 @@ public class Cw1Service extends AbstractCwService {
         LOG.info("[{}] : {}", event.getPrefix(), assessment.getId());
 
         // get parameters
-		Long a = ((Number) assessment.getInput(REFERENCE, "a")).longValue();
-		Long b = ((Number) assessment.getInput(REFERENCE, "b")).longValue();
-		Long k = ((Number) assessment.getInput(REFERENCE, "k")).longValue();
-		Long order = ((Number) assessment.getInput(REFERENCE, "order")).longValue();
-		Number n = (Number) assessment.getInput(REFERENCE, "n");
+		Long a = assessment.getInput(REFERENCE, "a").longValue();
+		Long b = assessment.getInput(REFERENCE, "b").longValue();
+		Long k = assessment.getInput(REFERENCE, "k").longValue();
 
-		Integer px = (Integer) assessment.getInput(REFERENCE, "px");
-		Integer py = (Integer) assessment.getInput(REFERENCE, "py");
-		Integer qx = (Integer) assessment.getInput(REFERENCE, "qx");
-		Integer qy = (Integer) assessment.getInput(REFERENCE, "qy");
+		Ecc ecc = new Ecc(a, b, k);
 		
-		Ecc ecc = new Ecc(a, b, k, order);
+		// compute order
+		assessment.setInput(REFERENCE, "order", ecc.getOrder().intValue());
+
+		Integer px = assessment.getInput(REFERENCE, "px");
+		Integer py = assessment.getInput(REFERENCE, "py");
+		Integer qx = assessment.getInput(REFERENCE, "qx");
+		Integer qy = assessment.getInput(REFERENCE, "qy");
+				
 		Point p = new Point(px, py);
 		Point q = new Point(qx, qy);
 
@@ -75,7 +77,7 @@ public class Cw1Service extends AbstractCwService {
 		assessment.setInput(REFERENCE, "ry", r.y);
 		
 		// solve the multiplication
-		Point s = Ecc.multiplyPoint(p, n, ecc);
+		Point s = Ecc.multiplyPoint(p, 3, ecc);
 		assessment.setInput(REFERENCE, "sx", s.x);
 		assessment.setInput(REFERENCE, "sy", s.y);
         
