@@ -34,7 +34,7 @@ public class UploadService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
 
-	private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_CO.*");
+	private static final Pattern pattern = Pattern.compile("^([a-zA-Z ]+)_([0-9]+)_.*_([0-9]+)_(?:CO|cw).*");
 
 	private final AssessmentRepository assessmentRepository;
 	private final ApplicationEventPublisher eventPublisher;
@@ -81,7 +81,7 @@ public class UploadService {
 	}
 
 	private Assessment load(final String id) {
-		Assessment assessment = assessmentRepository.findOne(id);
+		Assessment assessment = assessmentRepository.findOne(id.trim());
 		if (assessment != null)
 			return assessment;
 		throw new IllegalArgumentException(String.format("Unrecognized SRN: [%s]", id));

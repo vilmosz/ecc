@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head lang="en">
+		<meta charset="UTF-8" />
+		<title>CO3326 | Computer Security | 2016-17 | Coursework 1</title>
+		<link rel="stylesheet" type="text/css" href="https://konklone.io/json/assets/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="main.css" />
+		<link rel="icon" type="image/png" href="http://www.gold.ac.uk/favicon-32x32.png" sizes="32x32" />
+		<link rel="icon" type="image/png" href="http://www.gold.ac.uk/favicon-194x194.png" sizes="194x194" />
+		<link rel="icon" type="image/png" href="http://www.gold.ac.uk/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/png" href="http://www.gold.ac.uk/android-chrome-192x192.png" sizes="192x192" />
+		<link rel="icon" type="image/png" href="http://www.gold.ac.uk/favicon-16x16.png" sizes="16x16" />
+	</head>
+<body>
+
+<main>
+	<table class="table">
+		<thead>
+			<tr>
+				<th rowspan="2">Student code</th>
+				<th rowspan="2">Name</th>
+				<th colspan="6" rowspan="1">Curve/field parameters</th>
+				<th colspan="3" rowspan="1">Alice</th>
+				<th colspan="3" rowspan="1">Bob</th>
+				<th colspan="2" rowspan="1">Key</th>
+				<th rowspan="2">Comment</th>
+			</tr>
+			<tr>
+				<th>a</th>
+				<th>b</th>
+				<th>k</th>
+				<th>order</th>
+				<th>gx</th>
+				<th>gy</th>
+				<th>da</th>
+				<th>qax</th>
+				<th>qay</th>
+				<th>db</th>
+				<th>qbx</th>
+				<th>qby</th>
+				<th>X</th>
+				<th>Y</th>
+			</tr>
+		</thead>		
+		<tbody>
+			<tr th:each="assessment : ${assessments}">
+				<td th:text="${assessment.id}" />
+				<td th:text="${assessment.name}" />
+				<td th:text="${assessment.result['cw2']?.a}" />
+				<td th:text="${assessment.result['cw2']?.b}" />
+				<td th:text="${assessment.result['cw2']?.k}" />
+				<td th:text="${assessment.result['cw2']?.order}" />
+				<td th:text="${assessment.result['cw2']?.gx}" />
+				<td th:text="${assessment.result['cw2']?.gy}" />
+				<td th:text="${assessment.result['cw2']?.da}" />
+				<td th:text="${assessment.result['cw2']?.qax}" />
+				<td th:text="${assessment.result['cw2']?.qay}" />
+				<td th:text="${assessment.result['cw2']?.db}" />
+				<td th:text="${assessment.result['cw2']?.qbx}" />
+				<td th:text="${assessment.result['cw2']?.qby}" />
+				<td th:text="${assessment.result['cw2']?.keyx}" />
+				<td th:text="${assessment.result['cw2']?.keyy}" />
+				<td th:text="${assessment.error?.cw2}" />
+			</tr>
+		</tbody>
+	</table>
+</main>
+
+</body>
+</html>

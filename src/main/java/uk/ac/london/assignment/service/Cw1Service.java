@@ -1,14 +1,10 @@
 package uk.ac.london.assignment.service;
 
-import java.text.MessageFormat;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -20,20 +16,16 @@ import uk.ac.london.assignment.repository.AssessmentRepository;
 
 @Service
 @ConfigurationProperties(prefix = "uolia.cw.queries")
-public class AssessmentService {
+public class Cw1Service extends AbstractCwService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AssessmentService.class);
-    private static final String COMMENT = "{0} [expected={1},actual={2}]";
+    private static final Logger LOG = LoggerFactory.getLogger(Cw1Service.class);
     
     public static final String PREFIX = "cw1";
 
-    private final AssessmentRepository assessmentRepository;    
     private Map<String, String> cw1;
-    private List<String> header;
 
-    @Autowired
-    public AssessmentService(AssessmentRepository assessmentRepository) {
-        this.assessmentRepository = assessmentRepository;
+    public Cw1Service(AssessmentRepository assessmentRepository) {
+    	super(assessmentRepository);
     }
 
     /**
@@ -72,22 +64,10 @@ public class AssessmentService {
     	this.cw1 = cw1;
     }
     
-    private void match(final Assessment assessment, final String prefix, Function<Assessment, Object> expected, Function<Assessment, Object> actual, String key) {
-        try {
-        	LOG.info("match: {}", key);
-            boolean match = Objects.equal(expected.apply(assessment), actual.apply(assessment));
-            assessment.setResult(prefix, key,  match ? 1 : 0);
-            assessment.appendError(prefix, match ? null : MessageFormat.format(COMMENT, key, expected.apply(assessment), actual.apply(assessment)));
-        } catch (NullPointerException e) {
-            LOG.trace("{}", e);
-            assessment.setResult(prefix, key, 0);
-            assessment.appendError(prefix, MessageFormat.format(COMMENT, key, expected.apply(assessment), null));
-        }
-    }
-
     @EventListener
     void handleStudentEvent(AssessmentEvent event) {
-    	if (!Objects.equal(PREFIX, event.getPrefix()));
+    	if (!Objects.equal(PREFIX, event.getPrefix()))
+    		return;
         Assessment assessment = (Assessment) event.getSource();
         LOG.info("[{}] : {}", event.getPrefix(), assessment.getId());
     	assess(assessment);
