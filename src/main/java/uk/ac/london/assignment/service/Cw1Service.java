@@ -22,67 +22,71 @@ import uk.ac.london.ecc.Ecc;
 public class Cw1Service extends AbstractCwService {
 
     private static final Logger LOG = LoggerFactory.getLogger(Cw1Service.class);
-    
+
     public static final String PREFIX = "cw1";
 
     private Map<String, String> cw1;
 
     public Cw1Service(AssessmentRepository assessmentRepository) {
-    	super(assessmentRepository);
+        super(assessmentRepository);
     }
 
     @Override
     public List<String> getHeader() {
-    	if (header == null)
-    		header = cw1.keySet().stream().collect(Collectors.toList()); 
+        if (header == null)
+            header = cw1.keySet().stream().collect(Collectors.toList());
         return this.header;
     }
 
     public Map<String, String> getCw1() {
-    	return cw1;
+        return cw1;
     }
 
     public void setCw1(Map<String, String> cw1) {
-    	this.cw1 = cw1;
+        this.cw1 = cw1;
     }
-    
+
     @EventListener
-    void handleStudentEvent(AssessmentEvent event) {
-    	if (!Objects.equal(PREFIX, event.getPrefix()))
-    		return;
-        Assessment assessment = (Assessment) event.getSource();        
+    void handleAssessmentEvent(AssessmentEvent event) {
+        if (!Objects.equal(PREFIX, event.getPrefix()))
+            return;
+        Assessment assessment = (Assessment) event.getSource();
         LOG.info("[{}] : {}", event.getPrefix(), assessment.getId());
 
-        // get parameters
-		Long a = assessment.getInput(REFERENCE, "a").longValue();
-		Long b = assessment.getInput(REFERENCE, "b").longValue();
-		Long k = assessment.getInput(REFERENCE, "k").longValue();
-		Number n = assessment.getInput(REFERENCE, "n");
+        try {
+            // get parameters
+            Long a = assessment.getInput(REFERENCE, "a").longValue();
+            Long b = assessment.getInput(REFERENCE, "b").longValue();
+            Long k = assessment.getInput(REFERENCE, "k").longValue();
+            Number n = assessment.getInput(REFERENCE, "n");
 
-		Ecc ecc = new Ecc(a, b, k);
-		
-		// compute order
-		assessment.setInput(REFERENCE, "order", ecc.getOrder().intValue());
+            Ecc ecc = new Ecc(a, b, k);
 
-		Integer px = assessment.getInput(REFERENCE, "px");
-		Integer py = assessment.getInput(REFERENCE, "py");
-		Integer qx = assessment.getInput(REFERENCE, "qx");
-		Integer qy = assessment.getInput(REFERENCE, "qy");
-				
-		Point p = new Point(px, py);
-		Point q = new Point(qx, qy);
+            // compute order
+            assessment.setInput(REFERENCE, "order", ecc.getOrder().intValue());
 
-		// solve the addition
-		Point r = Ecc.addPoint(p, q, ecc);
-		assessment.setInput(REFERENCE, "rx", r.x);
-		assessment.setInput(REFERENCE, "ry", r.y);
-		
-		// solve the multiplication
-		Point s = Ecc.multiplyPoint(p, n, ecc);
-		assessment.setInput(REFERENCE, "sx", s.x);
-		assessment.setInput(REFERENCE, "sy", s.y);
-        
-    	assess(assessment, PREFIX);
+            Integer px = assessment.getInput(REFERENCE, "px");
+            Integer py = assessment.getInput(REFERENCE, "py");
+            Integer qx = assessment.getInput(REFERENCE, "qx");
+            Integer qy = assessment.getInput(REFERENCE, "qy");
+
+            Point p = new Point(px, py);
+            Point q = new Point(qx, qy);
+
+            // solve the addition
+            Point r = Ecc.addPoint(p, q, ecc);
+            assessment.setInput(REFERENCE, "rx", r.x);
+            assessment.setInput(REFERENCE, "ry", r.y);
+
+            // solve the multiplication
+            Point s = Ecc.multiplyPoint(p, n, ecc);
+            assessment.setInput(REFERENCE, "sx", s.x);
+            assessment.setInput(REFERENCE, "sy", s.y);
+
+            assess(assessment, PREFIX);
+        } catch (NullPointerException e) {
+            LOG.warn("No reference created for [{}]", assessment.getId());
+        }
     }
 
 }

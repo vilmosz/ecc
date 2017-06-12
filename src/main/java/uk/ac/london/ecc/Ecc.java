@@ -94,9 +94,9 @@ public class Ecc {
     }
 
     public Long getOrder() {
-    	if (order == null) {
-    		order = Integer.valueOf(getPoints().size()).longValue();
-    	}
+        if (order == null) {
+            order = Integer.valueOf(getPoints().size()).longValue();
+        }
         return order;
     }
 
@@ -116,10 +116,10 @@ public class Ecc {
     public Set<Point> getPoints() {
         Set<Point> points = new HashSet<>();
         points.add(null);
-        for (int x = 0; x < this.k; x += 1) {
-            for (int y = 0; y < this.k; y += 1) {
+        for (long x = 0; x < this.k; x += 1) {
+            for (long y = 0; y < this.k; y += 1) {
                 if ((y * y - x * x * x - this.a * x - this.b) % this.k == 0) {
-                    Point p = new Point(x, y);
+                    Point p = new Point(Long.valueOf(x).intValue(), Long.valueOf(y).intValue());
                     if (points.contains(p))
                         return points;
                     points.add(p);

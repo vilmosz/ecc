@@ -44,4 +44,10 @@ uolia:
         keyx: "$.assignment.key_exchange.key.x"
         keyy: "$.assignment.key_exchange.key.y"
   
+---
+spring:
+  profiles: test
+  data:
+    mongodb:
+      uri: "mongodb://127.0.0.1:37017/ecc"
          
